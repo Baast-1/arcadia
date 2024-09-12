@@ -1,0 +1,11 @@
+<div class="flex flex-col">
+{% if app.user %}
+    <div>
+        {{ app.user.firstname }}
+    </div>
+    <div>
+        {{ app.user.roles ? app.user.roles|json_encode|replace({'ROLE_': ''})|join(', ')|trim('[]"') : 'non défini' }}
+    </div>
+{% endif %}
+<a href="{{ path('app_user_index') }}">Utilisateurs</a>
+</div>
