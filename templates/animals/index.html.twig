@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des animaux{% endblock %}
+
+{% block content %}
+    <h1 class="text-2xl font-bold mb-4">Liste des animaux</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Race</th>
+                <th>Nombre de vue</th>
+                <th>Images</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for animal in animals %}
+            <tr>
+                <td>{{ animal.name }}</td>
+                <td>{{ animal.breed }}</td>
+                <td>{{ animal.view }}</td>
+                <td>
+                    {% for picture in animal.pictures %}
+                        <img src="{{ asset('uploads/' ~ picture.filename) }}" class="w-12 h-12 cover" alt="Service Picture">
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{{ path('app_animals_show', {'id': animal.id}) }}">Voir</a>
+                    <a href="{{ path('app_animals_edit', {'id': animal.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucun animal</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_animals_new') }}">Nouveau</a>
+{% endblock %}
