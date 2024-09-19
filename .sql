@@ -1,10 +1,7 @@
--- Création de la base de données arcadia
 CREATE DATABASE arcadia;
 
--- Sélection de la base de données arcadia
 USE arcadia;
 
--- Création de la table user
 CREATE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(180) NOT NULL,
@@ -15,4 +12,16 @@ CREATE TABLE user (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT UNIQ_IDENTIFIER_EMAIL UNIQUE (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO user (email, roles, password, firstname, lastname, updated_at, created_at)
+VALUES ('admin@gmail.com', '["ROLE_ADMIN"]', '$2y$13$2rdX6qJYS/Rs4REckzauCuIoXwCwKuUs2a0U01ZKwMZRTDE2DRiaa', 'Bastien', 'Terrier', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+CREATE TABLE service (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(60) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    picture LONGBLOB,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

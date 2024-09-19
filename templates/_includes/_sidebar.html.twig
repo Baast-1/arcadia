@@ -7,5 +7,9 @@
         {{ app.user.roles ? app.user.roles|json_encode|replace({'ROLE_': ''})|join(', ')|trim('[]"') : 'non défini' }}
     </div>
 {% endif %}
-<a href="{{ path('app_user_index') }}">Utilisateurs</a>
+{% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_dashboard') }}">Tableau de bord</a>
+        <a href="{{ path('app_user_index') }}">Utilisateurs</a>
+        <a href="{{ path('app_services_index') }}">Services</a>
+    {% endif %}
 </div>
