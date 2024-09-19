@@ -57,7 +57,7 @@ final class UserController extends AbstractController
                     ->from('admin@gmail.com')
                     ->to($userMail)
                     ->subject('Compte créé')
-                    ->text("Votre compte chez Arcadia a été créé. Voici votre email : $userMail et votre mot de passe : $password");
+                    ->text("Votre compte chez Arcadia a été créé. Voici votre email : $userMail");
 
                 try {
                     $this->mailer->send($email);
@@ -67,7 +67,7 @@ final class UserController extends AbstractController
                 }
 
             } catch (\Exception $e) {
-                $this->addFlash('danger', 'Une erreur s\'est produite : ' . $e->getMessage());
+                $this->addFlash('error', 'Une erreur s\'est produite : ' . $e->getMessage());
             }
             
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
@@ -106,7 +106,7 @@ final class UserController extends AbstractController
                 $this->addFlash('success', 'Utilisateur mis à jour avec succès.');
             } catch (\Exception $e) {
                 // Gestion des erreurs
-                $this->addFlash('danger', 'Une erreur s\'est produite lors de la mise à jour de l\'utilisateur : ' . $e->getMessage());
+                $this->addFlash('error', 'Une erreur s\'est produite lors de la mise à jour de l\'utilisateur : ' . $e->getMessage());
             }
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
