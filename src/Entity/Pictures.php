@@ -23,6 +23,9 @@ class Pictures
     #[ORM\OneToOne(inversedBy: 'picture', cascade: ['persist', 'remove'])]
     private ?Habitats $habitats = null;
 
+    #[ORM\ManyToOne(inversedBy: 'pictures')]
+    private ?Animals $animals = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Pictures
     public function setHabitats(?Habitats $habitats): static
     {
         $this->habitats = $habitats;
+
+        return $this;
+    }
+
+    public function getAnimals(): ?Animals
+    {
+        return $this->animals;
+    }
+
+    public function setAnimals(?Animals $animals): static
+    {
+        $this->animals = $animals;
 
         return $this;
     }

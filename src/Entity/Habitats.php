@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\HabitatsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HabitatsRepository::class)]
@@ -25,10 +27,17 @@ class Habitats
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
+    /**
+     * @var Collection<int, Animals>
+     */
+    #[ORM\OneToMany(targetEntity: Animals::class, mappedBy: 'habitats')]
+    private Collection $animals;
+
     public function __construct()
     {
         $this->updated_at = new \DateTimeImmutable();
         $this->created_at = new \DateTimeImmutable();
+        $this->animals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,6 +97,36 @@ class Habitats
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Animals>
+     */
+    public function getAnimals(): Collection
+    {
+        return $this->animals;
+    }
+
+    public function addAnimal(Animals $animal): static
+    {
+        if (!$this->animals->contains($animal)) {
+            $this->animals->add($animal);
+            $animal->setHabitats($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnimal(Animals $animal): static
+    {
+        if ($this->animals->removeElement($animal)) {
+            // set the owning side to null (unless already changed)
+            if ($animal->getHabitats() === $this) {
+                $animal->setHabitats(null);
+            }
+        }
 
         return $this;
     }

@@ -1,0 +1,11 @@
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+{% for picture in animal.pictures %}
+    <img src="{{ asset('uploads/' ~ picture.filename) }}" class="w-18 h-18 cover" alt="Service Picture">
+    {% if loop.index is even %}
+        <a href="{{ path('app_services_delete_picture', {id: picture.id, pictureId: picture.id}) }}" class="btn btn-danger" 
+           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?');">Supprimer</a>
+    {% endif %}
+{% endfor %}
