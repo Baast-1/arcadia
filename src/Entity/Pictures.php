@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\PicturesRepository;
@@ -16,24 +15,27 @@ class Pictures
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\File(mimeTypes: ['image/png', 'image/jpeg'])]
-    private ?string $file = null;
+    private ?string $filename = null;
 
-    #[ORM\ManyToOne(inversedBy: 'picture')]
+    #[ORM\OneToOne(inversedBy: 'picture', cascade: ['persist', 'remove'])]
     private ?Services $services = null;
+
+    #[ORM\OneToOne(inversedBy: 'picture', cascade: ['persist', 'remove'])]
+    private ?Habitats $habitats = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFile(): ?string
+    public function getFilename(): ?string
     {
-        return $this->file;
+        return $this->filename;
     }
 
-    public function setFile(string $file): static
+    public function setFilename(string $filename): static
     {
-        $this->file = $file;
+        $this->filename = $filename;
 
         return $this;
     }
@@ -46,6 +48,18 @@ class Pictures
     public function setServices(?Services $services): static
     {
         $this->services = $services;
+
+        return $this;
+    }
+
+    public function getHabitats(): ?Habitats
+    {
+        return $this->habitats;
+    }
+
+    public function setHabitats(?Habitats $habitats): static
+    {
+        $this->habitats = $habitats;
 
         return $this;
     }

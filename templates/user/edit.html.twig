@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}Modifier un utilisateur{% endblock %}
 
 {% block content %}
-    <h1 class="text-2xl font-bold mb-4">Modifier un Utilisateur</h1>
+    <h1 class="text-2xl font-bold mb-4">Modifier {{ user.firstname }}</h1>
 
     {{ include('user/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 

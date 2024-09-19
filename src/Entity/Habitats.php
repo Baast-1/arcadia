@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Entity;
 
-use App\Repository\ServicesRepository;
+use App\Repository\HabitatsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ServicesRepository::class)]
-class Services
+#[ORM\Entity(repositoryClass: HabitatsRepository::class)]
+class Habitats
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -15,19 +16,16 @@ class Services
     #[ORM\Column(length: 60)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $description = null;
-
-    #[ORM\OneToOne(mappedBy: 'services', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'habitats', cascade: ['persist', 'remove'])]
     private ?Pictures $picture = null;
-
+    
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    public function __construct() 
+    public function __construct()
     {
         $this->updated_at = new \DateTimeImmutable();
         $this->created_at = new \DateTimeImmutable();
@@ -50,18 +48,6 @@ class Services
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
     public function getPicture(): ?Pictures
     {
         return $this->picture;
@@ -70,11 +56,11 @@ class Services
     public function setPicture(?Pictures $picture): static
     {
         if ($picture === null && $this->picture !== null) {
-            $this->picture->setServices(null);
+            $this->picture->setHabitats(null);
         }
 
-        if ($picture !== null && $picture->getServices() !== $this) {
-            $picture->setServices($this);
+        if ($picture !== null && $picture->getHabitats() !== $this) {
+            $picture->setHabitats($this);
         }
 
         $this->picture = $picture;
