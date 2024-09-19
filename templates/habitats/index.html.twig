@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des habitats{% endblock %}
+
+{% block content %}
+    <h1 class="text-2xl font-bold mb-4">Liste des habitats</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Image</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for habitat in habitats %}
+            <tr>
+                <td>{{ habitat.name }}</td>
+                <td>
+                    {% if habitat.picture %}
+                        <img src="{{ asset('uploads/' ~ habitat.picture.filename) }}" class="w-12 h-12 cover" alt="habitat Picture">
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_habitats_show', {'id': habitat.id}) }}">Voit</a>
+                    <a href="{{ path('app_habitats_edit', {'id': habitat.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucun habitat</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_habitats_new') }}">Nouveau</a>
+{% endblock %}

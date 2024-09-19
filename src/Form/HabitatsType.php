@@ -2,22 +2,19 @@
 
 namespace App\Form;
 
-use App\Entity\Services;
+use App\Entity\Habitats;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\All;
-use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
 
-class ServicesType extends AbstractType
+class HabitatsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name')
-            ->add('description')
             ->add('picture', FileType::class, [
                 'label' => 'Télécharger une image',
                 'mapped' => false,
@@ -33,13 +30,12 @@ class ServicesType extends AbstractType
                     ])
                 ],
             ]);
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Services::class,
+            'data_class' => Habitats::class,
         ]);
     }
 }

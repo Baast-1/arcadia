@@ -3,12 +3,12 @@
 {% block title %}Services{% endblock %}
 
 {% block content %}
-    <h1 class="text-2xl font-bold mb-4">Voir un service</h1>
+    <h1 class="text-2xl font-bold mb-4">{{ service.name }}</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Name</th>
+                <th>Nom</th>
                 <td>{{ service.name }}</td>
             </tr>
             <tr>
@@ -16,7 +16,7 @@
                 <td>{{ service.description }}</td>
             </tr>
             <tr>
-                <th>Images</th>
+                <th>Image</th>
                 <td>
                     {% for picture in service.picture %}
                         <img src="{{ asset('uploads/services/' ~ picture.file) }}" class="w-12 h-12 cover" alt="Service Picture">
@@ -26,9 +26,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_services_index') }}">back to list</a>
+    <a href="{{ path('app_services_index') }}">Retour</a>
 
-    <a href="{{ path('app_services_edit', {'id': service.id}) }}">edit</a>
+    <a href="{{ path('app_services_edit', {'id': service.id}) }}">Modifier</a>
 
     {{ include('services/_delete_form.html.twig') }}
 {% endblock %}

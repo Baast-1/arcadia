@@ -2,40 +2,37 @@
 
 namespace App\Controller;
 
+use App\Entity\Habitats;
 use App\Entity\Pictures;
-use App\Entity\Services;
-use App\Form\ServicesType;
-use App\Repository\PicturesRepository;
-use App\Repository\ServicesRepository;
+use App\Form\HabitatsType;
+use App\Repository\HabitatsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_ADMIN')]
-#[Route('/services')]
-final class ServicesController extends AbstractController
+#[Route('/habitats')]
+final class HabitatsController extends AbstractController
 {
-    #[Route(name: 'app_services_index', methods: ['GET'])]
-    public function index(ServicesRepository $servicesRepository): Response
+    #[Route(name: 'app_habitats_index', methods: ['GET'])]
+    public function index(HabitatsRepository $habitatsRepository): Response
     {
-        return $this->render('services/index.html.twig', [
-            'services' => $servicesRepository->findAll(),
+        return $this->render('habitats/index.html.twig', [
+            'habitats' => $habitatsRepository->findAll(),
         ]);
     }
 
-    #[Route('/new', name: 'app_services_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_habitats_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $service = new Services();
-        $form = $this->createForm(ServicesType::class, $service);
+        $habitat = new Habitats();
+        $form = $this->createForm(HabitatsType::class, $habitat);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $entityManager->persist($service);
+                $entityManager->persist($habitat);
                 $entityManager->flush();
 
                 $pictureFile = $form->get('picture')->getData();
@@ -48,38 +45,38 @@ final class ServicesController extends AbstractController
 
                     $picture = new Pictures();
                     $picture->setFilename($fileName);
-                    $picture->setServices($service);
+                    $picture->setHabitats($habitat);
 
                     $entityManager->persist($picture);
                     $entityManager->flush();
                 }
 
-                $this->addFlash('success', 'Service créé avec succès !');
+                $this->addFlash('success', 'Habitat créé avec succès !');
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la création du service.');
+                $this->addFlash('error', 'Une erreur est survenue lors de la création de l\'habitat.');
             }
 
-            return $this->redirectToRoute('app_services_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_habitats_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('services/new.html.twig', [
-            'service' => $service,
+        return $this->render('habitats/new.html.twig', [
+            'habitat' => $habitat,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_services_show', methods: ['GET'])]
-    public function show(Services $service): Response
+    #[Route('/{id}', name: 'app_habitats_show', methods: ['GET'])]
+    public function show(Habitats $habitat): Response
     {
-        return $this->render('services/show.html.twig', [
-            'service' => $service,
+        return $this->render('habitats/show.html.twig', [
+            'habitat' => $habitat,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_services_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Services $service, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/edit', name: 'app_habitats_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Habitats $habitat, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ServicesType::class, $service);
+        $form = $this->createForm(HabitatsType::class, $habitat);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -89,7 +86,7 @@ final class ServicesController extends AbstractController
                 $pictureFile = $form->get('picture')->getData();
                 if ($pictureFile) {
                     // Suppression de l'ancienne image si elle existe
-                    $oldPicture = $service->getPicture();
+                    $oldPicture = $habitat->getPicture();
                     if ($oldPicture) {
                         $oldPicturePath = $this->getParameter('pictures_directory').'/'.$oldPicture->getFilename();
                         if (file_exists($oldPicturePath)) {
@@ -112,33 +109,33 @@ final class ServicesController extends AbstractController
                         // Création d'une nouvelle image
                         $picture = new Pictures();
                         $picture->setFilename($fileName);
-                        $picture->setServices($service);
+                        $picture->setHabitats($habitat);
                         $entityManager->persist($picture);
                     }
             
                     $entityManager->flush();
                 }
             
-                $this->addFlash('success', 'Service mis à jour avec succès !');
+                $this->addFlash('success', 'Habitat mis à jour avec succès !');
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du service : ');
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour de l\'habitat : ');
             }
 
-            return $this->redirectToRoute('app_services_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_habitats_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('services/edit.html.twig', [
-            'service' => $service,
+        return $this->render('habitats/edit.html.twig', [
+            'habitat' => $habitat,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_services_delete', methods: ['POST'])]
-    public function delete(Request $request, Services $service, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'app_habitats_delete', methods: ['POST'])]
+    public function delete(Request $request, Habitats $habitat, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$service->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$habitat->getId(), $request->request->get('_token'))) {
             try {
-                $picture = $service->getPicture();
+                $picture = $habitat->getPicture();
                 if ($picture) {
                     $picturePath = $this->getParameter('pictures_directory').'/'.$picture->getFilename();
                     if (file_exists($picturePath)) {
@@ -146,17 +143,17 @@ final class ServicesController extends AbstractController
                     }
                 }
         
-                $entityManager->remove($service);
+                $entityManager->remove($habitat);
                 $entityManager->flush();
         
-                $this->addFlash('success', 'Service supprimé avec succès !');
+                $this->addFlash('success', 'Habitat supprimé avec succès !');
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la suppression du service.');
+                $this->addFlash('error', 'Une erreur est survenue lors de la suppression de l\'habitat.');
             }
         } else {
             $this->addFlash('error', 'Token CSRF invalide.');
         }
 
-        return $this->redirectToRoute('app_services_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_habitats_index', [], Response::HTTP_SEE_OTHER);
     }
 }

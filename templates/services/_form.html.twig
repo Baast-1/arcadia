@@ -1,12 +1,4 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}
-
-{% for picture in service.picture %}
-    <img src="{{ asset('uploads/services/' ~ picture.file) }}" class="w-18 h-18 cover" alt="Service Picture">
-    {% if loop.index is even %}
-        <a href="{{ path('app_services_delete_picture', {id: service.id, pictureId: picture.id}) }}" class="btn btn-danger" 
-           onclick="return confirm('Are you sure you want to delete this picture?');">Delete</a>
-    {% endif %}
-{% endfor %}
