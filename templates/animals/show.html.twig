@@ -30,6 +30,8 @@
         </tbody>
     </table>
 
+    <a href="{{ path('app_feed_new', {'animalId': animal.id}) }}">Add Feed</a>
+
     <a href="{{ path('app_animals_index') }}">Retour</a>
 
     <a href="{{ path('app_animals_edit', {'id': animal.id}) }}">Modifier</a>

@@ -85,7 +85,6 @@ final class HabitatsController extends AbstractController
             
                 $pictureFile = $form->get('picture')->getData();
                 if ($pictureFile) {
-                    // Suppression de l'ancienne image si elle existe
                     $oldPicture = $habitat->getPicture();
                     if ($oldPicture) {
                         $oldPicturePath = $this->getParameter('pictures_directory').'/'.$oldPicture->getFilename();
@@ -94,7 +93,6 @@ final class HabitatsController extends AbstractController
                         }
                     }
             
-                    // Upload de la nouvelle image
                     $fileName = uniqid().'.'.$pictureFile->guessExtension();
                     $pictureFile->move(
                         $this->getParameter('pictures_directory'),
@@ -102,11 +100,9 @@ final class HabitatsController extends AbstractController
                     );
             
                     if ($oldPicture) {
-                        // Mise à jour de l'image existante
                         $oldPicture->setFilename($fileName);
                         $entityManager->persist($oldPicture);
                     } else {
-                        // Création d'une nouvelle image
                         $picture = new Pictures();
                         $picture->setFilename($fileName);
                         $picture->setHabitats($habitat);
