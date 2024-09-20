@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Pictures;
 use App\Entity\Services;
 use App\Form\ServicesType;
-use App\Repository\PicturesRepository;
 use App\Repository\ServicesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('ROLE_ADMIN', 'ROLE_EMPLOYE')]
 #[Route('/services')]
 final class ServicesController extends AbstractController
 {
@@ -88,7 +87,6 @@ final class ServicesController extends AbstractController
             
                 $pictureFile = $form->get('picture')->getData();
                 if ($pictureFile) {
-                    // Suppression de l'ancienne image si elle existe
                     $oldPicture = $service->getPicture();
                     if ($oldPicture) {
                         $oldPicturePath = $this->getParameter('pictures_directory').'/'.$oldPicture->getFilename();
@@ -96,20 +94,17 @@ final class ServicesController extends AbstractController
                             unlink($oldPicturePath);
                         }
                     }
-            
-                    // Upload de la nouvelle image
+
                     $fileName = uniqid().'.'.$pictureFile->guessExtension();
                     $pictureFile->move(
                         $this->getParameter('pictures_directory'),
                         $fileName
                     );
-            
+
                     if ($oldPicture) {
-                        // Mise à jour de l'image existante
                         $oldPicture->setFilename($fileName);
                         $entityManager->persist($oldPicture);
                     } else {
-                        // Création d'une nouvelle image
                         $picture = new Pictures();
                         $picture->setFilename($fileName);
                         $picture->setServices($service);

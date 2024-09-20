@@ -33,9 +33,17 @@ class Animals
     #[ORM\ManyToOne(inversedBy: 'animals')]
     private ?Habitats $habitats = null;
 
+    /**
+     * @var Collection<int, Feed>
+     */
+    #[ORM\OneToMany(targetEntity: Feed::class, mappedBy: 'animal')]
+    private Collection $feeds;
+
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
+        $this->animalFeeds = new ArrayCollection();
+        $this->feeds = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,6 +125,36 @@ class Animals
     public function setHabitats(?Habitats $habitats): static
     {
         $this->habitats = $habitats;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feed>
+     */
+    public function getFeeds(): Collection
+    {
+        return $this->feeds;
+    }
+
+    public function addFeed(Feed $feed): static
+    {
+        if (!$this->feeds->contains($feed)) {
+            $this->feeds->add($feed);
+            $feed->setAnimal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeed(Feed $feed): static
+    {
+        if ($this->feeds->removeElement($feed)) {
+            // set the owning side to null (unless already changed)
+            if ($feed->getAnimal() === $this) {
+                $feed->setAnimal(null);
+            }
+        }
 
         return $this;
     }

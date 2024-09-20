@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Feed{% endblock %}
+
+{% block body %}
+    <h1>Feed</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ feed.id }}</td>
+            </tr>
+            <tr>
+                <th>Food</th>
+                <td>{{ feed.food }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ feed.quantity }}</td>
+            </tr>
+            <tr>
+                <th>Time</th>
+                <td>{{ feed.time ? feed.time|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_feed_index') }}">back to list</a>
+
+    <a href="{{ path('app_feed_edit', {'id': feed.id}) }}">edit</a>
+
+    {{ include('feed/_delete_form.html.twig') }}
+{% endblock %}

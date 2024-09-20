@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Feed index{% endblock %}
+
+{% block body %}
+    <h1>Feed index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Food</th>
+                <th>Quantity</th>
+                <th>Time</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for feed in feeds %}
+            <tr>
+                <td>{{ feed.id }}</td>
+                <td>{{ feed.food }}</td>
+                <td>{{ feed.quantity }}</td>
+                <td>{{ feed.time ? feed.time|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_feed_show', {'id': feed.id}) }}">show</a>
+                    <a href="{{ path('app_feed_edit', {'id': feed.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_feed_new') }}">Create new</a>
+{% endblock %}
