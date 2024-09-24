@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Services{% endblock %}
+
+{% block body %}
+    {% for service in services %}
+        <div>
+            <h2>{{ service.name }}</h2>
+            <div>{{ service.description|raw }}</div>
+            {% if service.picture %}
+                <img src="{{ asset('uploads/' ~ service.picture.filename) }}" class="w-12 h-12 cover" alt="Service Picture">
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

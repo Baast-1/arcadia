@@ -9,6 +9,7 @@
         <thead>
             <tr>
                 <th>Nom</th>
+                <th>Description</th>
                 <th>Image</th>
                 <th></th>
             </tr>
@@ -17,13 +18,14 @@
         {% for habitat in habitats %}
             <tr>
                 <td>{{ habitat.name }}</td>
+                <td>{{ habitat.description|raw }}</td>
                 <td>
                     {% if habitat.picture %}
                         <img src="{{ asset('uploads/' ~ habitat.picture.filename) }}" class="w-12 h-12 cover" alt="habitat Picture">
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ path('app_habitats_show', {'id': habitat.id}) }}">Voit</a>
+                    <a href="{{ path('app_habitats_show', {'id': habitat.id}) }}">Voir</a>
                     <a href="{{ path('app_habitats_edit', {'id': habitat.id}) }}">Modifier</a>
                 </td>
             </tr>

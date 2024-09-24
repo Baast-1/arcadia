@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reports index{% endblock %}
+
+{% block body %}
+    <h1>Reports index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>State</th>
+                <th>Food</th>
+                <th>Food_weight</th>
+                <th>Time</th>
+                <th>Detail_state</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for report in reports %}
+            <tr>
+                <td>{{ report.id }}</td>
+                <td>{{ report.state }}</td>
+                <td>{{ report.food }}</td>
+                <td>{{ report.foodWeight }}</td>
+                <td>{{ report.time ? report.time|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ report.detailState }}</td>
+                <td>
+                    <a href="{{ path('app_reports_show', {'id': report.id}) }}">show</a>
+                    <a href="{{ path('app_reports_edit', {'id': report.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reports_new') }}">Create new</a>
+{% endblock %}

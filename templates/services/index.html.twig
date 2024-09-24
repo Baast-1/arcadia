@@ -18,7 +18,7 @@
         {% for service in services %}
             <tr>
                 <td>{{ service.name }}</td>
-                <td>{{ service.description }}</td>
+                <td>{{ service.description|raw }}</td>
                 <td>
                     {% if service.picture %}
                         <img src="{{ asset('uploads/' ~ service.picture.filename) }}" class="w-12 h-12 cover" alt="Service Picture">

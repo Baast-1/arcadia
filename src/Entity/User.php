@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -43,6 +45,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
+    /**
+     * @var Collection<int, Reports>
+     */
+    #[ORM\OneToMany(targetEntity: Reports::class, mappedBy: 'user')]
+    private Collection $reports;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -64,6 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->updated_at = new \DateTimeImmutable();
         $this->created_at = new \DateTimeImmutable();
+        $this->reports = new ArrayCollection();
     }
 
     /**
@@ -166,6 +175,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reports>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Reports $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Reports $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getUser() === $this) {
+                $report->setUser(null);
+            }
+        }
 
         return $this;
     }

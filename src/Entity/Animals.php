@@ -39,11 +39,18 @@ class Animals
     #[ORM\OneToMany(targetEntity: Feed::class, mappedBy: 'animal')]
     private Collection $feeds;
 
+    /**
+     * @var Collection<int, Reports>
+     */
+    #[ORM\OneToMany(targetEntity: Reports::class, mappedBy: 'animal')]
+    private Collection $reports;
+
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
         $this->animalFeeds = new ArrayCollection();
         $this->feeds = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -153,6 +160,36 @@ class Animals
             // set the owning side to null (unless already changed)
             if ($feed->getAnimal() === $this) {
                 $feed->setAnimal(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reports>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Reports $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setAnimal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Reports $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getAnimal() === $this) {
+                $report->setAnimal(null);
             }
         }
 

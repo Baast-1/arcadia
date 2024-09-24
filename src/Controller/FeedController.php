@@ -28,22 +28,28 @@ final class FeedController extends AbstractController
     {
         $animal = $entityManager->getRepository(Animals::class)->find($animalId);
         if (!$animal) {
-            throw $this->createNotFoundException('Animal not found');
+            throw $this->createNotFoundException('Animal non trouvé');
         }
-
+    
         $feed = new Feed();
         $feed->setAnimal($animal);
-
+    
         $form = $this->createForm(FeedType::class, $feed);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($feed);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_animals_show', ['id' => $animalId], Response::HTTP_SEE_OTHER);
+            try {
+                $entityManager->persist($feed);
+                $entityManager->flush();
+    
+                $this->addFlash('success', 'Le feed a été créé avec succès.');
+    
+                return $this->redirectToRoute('app_animals_show', ['id' => $animalId], Response::HTTP_SEE_OTHER);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la création du feed.');
+            }
         }
-
+    
         return $this->render('feed/new.html.twig', [
             'feed' => $feed,
             'form' => $form->createView(),

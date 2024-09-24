@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\HabitatsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HabitatsRepository::class)]
@@ -17,6 +18,9 @@ class Habitats
 
     #[ORM\Column(length: 60)]
     private ?string $name = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
 
     #[ORM\OneToOne(mappedBy: 'habitats', cascade: ['persist', 'remove'])]
     private ?Pictures $picture = null;
@@ -33,11 +37,18 @@ class Habitats
     #[ORM\OneToMany(targetEntity: Animals::class, mappedBy: 'habitats')]
     private Collection $animals;
 
+    /**
+     * @var Collection<int, Comments>
+     */
+    #[ORM\OneToMany(targetEntity: Comments::class, mappedBy: 'habitat')]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->updated_at = new \DateTimeImmutable();
         $this->created_at = new \DateTimeImmutable();
         $this->animals = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,6 +64,18 @@ class Habitats
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }
@@ -125,6 +148,36 @@ class Habitats
             // set the owning side to null (unless already changed)
             if ($animal->getHabitats() === $this) {
                 $animal->setHabitats(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comments>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comments $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setHabitat($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comments $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getHabitat() === $this) {
+                $comment->setHabitat(null);
             }
         }
 
