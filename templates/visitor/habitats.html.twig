@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Habitats{% endblock %}
+
+{% block body %}
+    {% for habitat in habitats %}
+        <div>
+            <h2>{{ habitat.name }}</h2>
+            <div>{{ habitat.description|raw }}</div>
+            {% if habitat.picture %}
+                <img src="{{ asset('uploads/' ~ habitat.picture.filename) }}" class="w-12 h-12 cover" alt="Service Picture">
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

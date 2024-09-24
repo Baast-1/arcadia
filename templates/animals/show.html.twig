@@ -27,10 +27,21 @@
                     {% endfor %}
                 </td>
             </tr>
+            <tr>
+                <th>Nourriture</th>
+                <td>
+                    {% for feed in animal.feeds %}
+                        <p>{{ feed.food }}</p>
+                        <p>{{ feed.quantity }}</p>
+                        <p>{{ feed.time ? feed.time|date('d-m-Y') : '' }}</p>
+                    {% endfor %}
+                </td>
+            </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_feed_new', {'animalId': animal.id}) }}">Add Feed</a>
+    <a href="{{ path('app_feed_new', {'animalId': animal.id}) }}">Ajouter de la nourriture</a>
+    <a href="{{ path('app_reports_new', {'animalId': animal.id}) }}">Ajouter un rapport</a>
 
     <a href="{{ path('app_animals_index') }}">Retour</a>
 

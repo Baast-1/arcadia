@@ -11,10 +11,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-#[IsGranted('ROLE_ADMIN', 'ROLE_EMPLOYE')]
+
 #[Route('/services')]
+#[Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_EMPLOYE')")]
 final class ServicesController extends AbstractController
 {
     #[Route(name: 'app_services_index', methods: ['GET'])]

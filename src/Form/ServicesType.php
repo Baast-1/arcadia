@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Services;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\All;
@@ -17,7 +18,10 @@ class ServicesType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('description')
+            ->add('description', TextareaType::class, [
+                'attr' => ['class' => 'tinymce'],
+                'required' => false,
+            ])
             ->add('picture', FileType::class, [
                 'label' => 'Télécharger une image',
                 'mapped' => false,

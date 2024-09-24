@@ -1,4 +1,6 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.description, {'attr': {'class': 'tinymce'}}) }}
+    {{ form_row(form.picture) }}
     <button class="btn">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}
