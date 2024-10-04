@@ -3,23 +3,28 @@
 {% block title %}Services{% endblock %}
 
 {% block body %}
-<div class="flex flex-col justify-center items-center w-full mt-8 lg:mt-36">
+
+{# Desktop #}
+<div class="flex flex-col justify-center items-center w-full mt-20 lg:mt-36">
     <div class="max-w-[80rem] w-full px-4">
-        <div class="grid grid-cols-1 gap-4">
-            {% for service in services %}
-                <div class="flex flex-col lg:flex-row {% if loop.index is odd %}lg:flex-row-reverse{% endif %} items-center bg-white p-4 rounded-lg shadow-md">
-                    <div class="flex-1 lg:w-1/2">
-                        <h2 class="text-xl font-semibold">{{ service.name }}</h2>
-                        <div class="mt-2">{{ service.description|raw }}</div>
-                    </div>
-                    {% if service.picture %}
-                        <div class="w-full lg:w-1/2 h-48 lg:h-auto flex-shrink-0">
-                            <img src="{{ asset('uploads/' ~ service.picture.filename) }}" class="w-full h-full object-cover rounded-lg" alt="Service Picture">
-                        </div>
-                    {% endif %}
+        <h1 class="text-2xl lg:text-3xl font-extrabold text-white text-center mb-4">Nos Services</h1>
+        {% for service in services %}
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 bg-white mb-4 p-4 rounded-2xl">
+                <div class="flex flex-col justify-center items-center">
+                    <h2 class="text-xl font-semibold text-justify">{{ service.name }}</h2>
+                    <div class="mt-2 text-sm lg:text-base text-justify">{{ service.description|raw }}</div>
                 </div>
-            {% endfor %}
+                {% if service.picture %}
+                <div class="flex justify-center items-center">
+                    <div class="w-9/12 h-9/12 ">
+                        <img src="{{ asset('uploads/' ~ service.picture.filename) }}" class="w-full h-full object-cover rounded-lg" alt="Service Picture">
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        {% endfor %}
         </div>
     </div>
 </div>
 {% endblock %}
+
