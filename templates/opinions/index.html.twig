@@ -9,7 +9,7 @@
         <thead>
             <tr>
                 <th>Pseudo</th>
-                <th>Description</th>
+                <th>Content</th>
                 <th>Visible</th>
                 <th>Actions</th>
             </tr>
@@ -18,7 +18,7 @@
         {% for opinion in opinions %}
             <tr>
                 <td>{{ opinion.pseudo }}</td>
-                <td>{{ opinion.description }}</td>
+                <td>{{ opinion.content }}</td>
                 <td>{{ opinion.isVisible ? 'Yes' : 'No' }}</td>
                 <td>
                     <a href="{{ path('app_opinions_show', {'id': opinion.id}) }}" class="btn btn-primary">Show</a>

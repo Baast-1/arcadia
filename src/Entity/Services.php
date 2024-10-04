@@ -15,7 +15,7 @@ class Services
     #[ORM\Column(length: 60)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
     private ?string $description = null;
 
     #[ORM\OneToOne(mappedBy: 'services', cascade: ['persist', 'remove'])]
@@ -54,11 +54,11 @@ class Services
     {
         return $this->description;
     }
-
+    
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
+    
         return $this;
     }
 

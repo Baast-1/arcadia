@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}"/>
+    <style> @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');</style>
+    
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+    
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-gradient">
+    {{ include ('_includes/_header.html.twig') }}
+
+    {% block body %}
+    {% endblock %}
+
+    {{ include ('_includes/_footer.html.twig') }}
+</body>
+</html>

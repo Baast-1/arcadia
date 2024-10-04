@@ -10,14 +10,21 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-
+use Psr\Log\LoggerInterface;
 
 #[Route('/services')]
 #[Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_EMPLOYE')")]
 final class ServicesController extends AbstractController
 {
+    private LoggerInterface $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     #[Route(name: 'app_services_index', methods: ['GET'])]
     public function index(ServicesRepository $servicesRepository): Response
     {
@@ -56,6 +63,7 @@ final class ServicesController extends AbstractController
 
                 $this->addFlash('success', 'Service créé avec succès !');
             } catch (\Exception $e) {
+                $this->logger->error('Error creating service: ' . $e->getMessage());
                 $this->addFlash('error', 'Une erreur est survenue lors de la création du service.');
             }
 
@@ -117,7 +125,8 @@ final class ServicesController extends AbstractController
             
                 $this->addFlash('success', 'Service mis à jour avec succès !');
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du service : ');
+                $this->logger->error('Error updating service: ' . $e->getMessage());
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du service.');
             }
 
             return $this->redirectToRoute('app_services_index', [], Response::HTTP_SEE_OTHER);
@@ -147,6 +156,7 @@ final class ServicesController extends AbstractController
         
                 $this->addFlash('success', 'Service supprimé avec succès !');
             } catch (\Exception $e) {
+                $this->logger->error('Error deleting service: ' . $e->getMessage());
                 $this->addFlash('error', 'Une erreur est survenue lors de la suppression du service.');
             }
         } else {
