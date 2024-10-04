@@ -41,7 +41,7 @@ class OpinionsController extends AbstractController
             $data[] = [
                 'id' => (string) $opinion->getId(),
                 'pseudo' => $opinion->getPseudo(),
-                'description' => $opinion->getDescription(),
+                'content' => $opinion->getContent(),
                 'visible' => $opinion->isVisible(),
             ];
         }
@@ -90,7 +90,7 @@ class OpinionsController extends AbstractController
         return $this->json([
             'id' => (string) $opinion->getId(),
             'pseudo' => $opinion->getPseudo(),
-            'description' => $opinion->getDescription(),
+            'content' => $opinion->getContent(),
             'visible' => $opinion->isVisible(),
         ]);
     }

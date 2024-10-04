@@ -14,7 +14,7 @@ class Opinions
     private $pseudo;
 
     #[MongoDB\Field(type: "string")]
-    private $description;
+    private $content;
 
     #[MongoDB\Field(type: "bool")]
     private $is_visible;
@@ -40,14 +40,14 @@ class Opinions
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getContent(): ?string
     {
-        return $this->description;
+        return $this->content;
     }
 
-    public function setDescription(string $description): self
+    public function setContent(string $content): self
     {
-        $this->description = $description;
+        $this->content = $content;
         return $this;
     }
 

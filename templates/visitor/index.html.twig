@@ -1,9 +1,395 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseVisitor.html.twig' %}
 
-{% block title %}Hello VisitorController!{% endblock %}
+{% block title %}Arcadia{% endblock %}
 
 {% block body %}
-    <a href="{{ path('app_visitor_services') }}">Nos Services</a>
-    <a href="{{ path('app_visitor_habitats') }}">Nos Habitats</a>
-    <a href="{{ path('app_opinions_new') }}">Opinions</a>
+{# Desktop #}
+<div class="hidden lg:flex flex-col justify-center items-center w-full mt-36">
+    <div class="max-w-[80rem]">
+        <div class="w-full flex flex-col justify-center items-center">
+            <div class="px-4">
+                <h1 class="text-3xl font-extrabold text-white">Bienvenue au zoo Arcadia</h1>
+            </div>
+            <div class="p-4 max-w-4xl">
+                <p class="text-base font-normal text-white text-justify">
+                    Niché près de la légendaire forêt de Brocéliande en Bretagne, le Zoo Arcadia est un refuge pour des animaux venant des
+                    quatre coins du monde depuis 1960. Notre zoo incarne des valeurs d’écologie et d’indépendance énergétique, offrant un 
+                    cadre sécurisé et respectueux de la nature à nos résidents à poils, plumes et écailles.
+                </p>
+            </div>
+        </div>
+        <div class="rounded-2xl w-full max-h-[26rem] overflow-hidden mt-4">
+            <img alt="main-picture" class="w-full h-auto object-cover object-bottom -mt-40" src="{{ asset('/picture/bear.jpg') }}"/>
+        </div>
+    </div>
+</div>
+
+{# Mobile #}
+<div class="lg:hidden flex flex-col justify-center items-center w-full mt-24">
+    <div style="max-width: 22rem;">
+        <div class="w-full flex flex-col justify-center items-center">
+            <div class="px-4">
+                <h2 class="text-2xl font-extrabold text-white text-center mb-4">Bienvenue au zoo <br>
+                    Arcadia
+                </h2>
+            </div>
+            <div class="mb-4">
+                <p class="text-sm font-normal text-white text-justify">
+                    Niché près de la légendaire forêt de Brocéliande en Bretagne, le Zoo Arcadia est un refuge pour des animaux venant des
+                    quatre coins du monde depuis 1960. Notre zoo incarne des valeurs d’écologie et d’indépendance énergétique, offrant un 
+                    cadre sécurisé et respectueux de la nature à nos résidents à poils, plumes et écailles.
+                </p>
+            </div>
+            <div class="rounded-2xl w-full max-h-[26rem] overflow-hidden mt-4">
+                <img alt="main-picture" class="w-full h-auto object-cover object-bottom" src="{{ asset('/picture/bear.jpg') }}"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Desktop #}
+<div class="hidden lg:flex flex-col justify-center items-center w-full mt-36">
+    <div class="max-w-[80rem]">
+        <div class="w-full flex flex-col justify-center items-center">
+            <div class="px-4">
+                <h2 class="text-3xl font-extrabold text-white">Les Habitats du Zoo</h2>
+            </div>
+            <div class="p-4 max-w-4xl">
+                <p class="text-base font-normal text-white text-justify">
+                    Au Zoo Arcadia, nous avons recréé plusieurs habitats naturels pour que nos animaux puissent vivre dans un environnement
+                    qui ressemble à leur milieu d'origine. Explorez la Savane, la Jungle ou les Marais, et découvrez des animaux fascinants dans
+                    un cadre respectueux de la nature.
+                </p>
+            </div>
+        </div>
+        <div class="w-full max-h-[26rem] overflow-hidden mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+        {% for habitat in habitats %}
+            <div class="relative w-full h-full group cursor-pointer">
+                <img alt="main-picture" class="w-full h-full object-cover object-bottom rounded-2xl cursor-pointer group-hover:brightness-50" src="{{ asset('uploads/' ~ habitat.picture.filename) }}"/>
+                <p class="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 px-2 py-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity">{{ habitat.name }}</p>
+            </div>
+        {% endfor %}
+        </div>
+        {% set allPictures = [] %}
+        {% for animal in animals %}
+            {% for picture in animal.pictures %}
+                {% set allPictures = allPictures|merge([picture]) %}
+            {% endfor %}
+        {% endfor %}
+        {% set allPictures = allPictures|shuffle %}
+        <div id="infinite-scroll-container-desktop" class="flex overflow-x-auto space-x-4 w-full mb-8 no-scrollbar">
+            {% for picture in allPictures %}
+                <div class="flex-none w-40">
+                    <img class="w-full h-40 object-cover rounded-2xl" src="{{ asset('uploads/' ~ picture.filename) }}"/>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <button class="py-2 px-6 bg-white border-white rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl">Nos Habitats</button>
+    </div>
+</div>
+
+{# Mobile #}
+<div class="lg:hidden flex flex-col justify-center items-center w-full mt-12">
+    <div style="max-width: 22rem;">
+        <div class="w-full flex flex-col justify-center items-center">
+            <div class="px-4 mt-24">
+                <h1 class="text-2xl font-extrabold text-white text-center mb-4">Les Habitats du Zoo</h1>
+            </div>
+            <div class="mb-4">
+                <p class="text-sm font-normal text-white text-justify">
+                    Au Zoo Arcadia, nous avons recréé plusieurs habitats naturels pour que nos animaux puissent vivre dans un environnement
+                    qui ressemble à leur milieu d'origine. Explorez la Savane, la Jungle ou les Marais, et découvrez des animaux fascinants dans
+                    un cadre respectueux de la nature.
+                </p>
+            </div>
+            <div id="swiperContainer" class="swiper-container h-full mt-4">
+                <div class="swiper-wrapper">
+                    {% for habitat in habitats %}
+                        <div class="swiper-slide">
+                            <div class="group relative grid h-[26rem] w-[16rem] flex-col items-end justify-center overflow-hidden rounded-2xl text-center mb-2">
+                                <img src="{{ asset('uploads/' ~ habitat.picture.filename) }}" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% set allPictures = [] %}
+            {% for animal in animals %}
+                {% for picture in animal.pictures %}
+                    {% set allPictures = allPictures|merge([picture]) %}
+                {% endfor %}
+            {% endfor %}
+            {% set allPictures = allPictures|shuffle %}
+
+            <div id="infinite-scroll-container-mobile" class="flex overflow-x-auto space-x-4 w-full mb-8">
+                {% for picture in allPictures %}
+                    <div class="flex-none w-40">
+                        <img class="w-full h-40 object-cover rounded-2xl" src="{{ asset('uploads/' ~ picture.filename) }}"/>
+                    </div>
+                {% endfor %}
+            </div>
+            <div>
+                <button class="py-2 px-6 bg-white border-white rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl">Nos Habitats</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Desktop #}
+<div class="hidden lg:flex flex-col justify-center items-center w-full mt-36">
+    <div class="max-w-[80rem]">
+        <div class="w-full flex flex-col justify-center items-center">
+            <div class="px-4">
+                <h2 class="text-3xl font-extrabold text-white">Les Services du Zoo</h2>
+            </div>
+            <div class="p-4 max-w-4xl">
+                <p class="text-base font-normal text-white text-justify">
+                    Lors de votre visite, profitez de nos différents services pour rendre votre journée encore plus agréable : dégustez un repas 
+                    dans notre restaurant, suivez nos visites guidées pour en apprendre plus sur nos animaux, ou laissez-vous emporter par une
+                    balade en petit train à travers le zoo.
+                </p>
+            </div>
+        </div>
+        <div class="w-full max-h-[26rem] overflow-hidden mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-8">
+        {% for service in services %}
+            <div class="relative w-full h-full group cursor-pointer">
+                <img alt="main-picture" class="max-w-[20rem] h-auto object-cover object-bottom rounded-2xl cursor-pointer group-hover:brightness-50" src="{{ asset('uploads/' ~ service.picture.filename) }}"/>
+                <p class="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 px-2 py-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity">{{ service.name }}</p>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    <div>
+        <button class="py-2 px-6 bg-white border-white rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl">Nos Service</button>
+    </div>
+</div>
+
+{# Mobile #}
+<div class="lg:hidden flex flex-col justify-center items-center w-full mt-12">
+    <div style="max-width: 22rem;">
+        <div class="w-full flex flex-col justify-center items-center">
+            <div class="px-4 mt-24">
+                <h1 class="text-2xl font-extrabold text-white text-center mb-4">Les Services du Zoo</h1>
+            </div>
+            <div class="mb-4">
+                <p class="text-sm font-normal text-white text-justify">
+                    Lors de votre visite, profitez de nos différents services pour rendre votre journée encore plus agréable : dégustez un repas 
+                    dans notre restaurant, suivez nos visites guidées pour en apprendre plus sur nos animaux, ou laissez-vous emporter par une
+                    balade en petit train à travers le zoo.
+                </p>
+            </div>
+            <div id="swiperContainer" class="swiper-container h-full mt-4 mb-8">
+                <div class="swiper-wrapper">
+                    {% for service in services %}
+                        <div class="swiper-slide">
+                            <div class="group relative grid h-[26rem] w-[16rem] flex-col items-end justify-center overflow-hidden rounded-2xl text-center mb-2">
+                                <img src="{{ asset('uploads/' ~ service.picture.filename) }}" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div>
+                <button class="py-2 px-6 bg-white border-white rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl">Nos Services</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Desktop - Mobile #}
+<div class="flex flex-col justify-center items-center w-full mt-36 lg:mt-12">
+    <div class="max-w-[80rem]">
+        <div class="w-full flex flex-col justify-center items-center">
+            <div class="px-2">
+                <h2 class="text-2xl text-center sm:text-3xl font-extrabold text-white">Ce que nos visiteurs disent de nous</h2>
+            </div>
+        </div>
+        <div class="w-full max-h-[26rem] overflow-hidden  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 mb-8">
+            <div class="p-4 w-full">
+                {{ form_start(form, {'attr': {'class': 'space-y-4 flex flex-col justify-center item-center mt-4'}}) }}
+                <div>
+                    {{ form_label(form.pseudo, 'Votre pseudo', {'label_attr': {'class': 'block text-sm font-semibold text-black'}}) }}
+                    {{ form_widget(form.pseudo, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                    {{ form_errors(form.pseudo, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                </div>
+                <div>
+                    {{ form_label(form.content, 'Votre avis', {'label_attr': {'class': 'block text-sm font-semibold text-black'}}) }}
+                    {{ form_widget(form.content, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                    {{ form_errors(form.content, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                </div>
+                <div class="flex justify-center items-center">
+                    <button class="py-2 px-6 bg-white border-white rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl">{{ button_label|default('Laisser mon avis') }}</button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <div id="infinite-scroll-container-desktop-vertical" class="hidden lg:flex flex-col gap-4 pl-16 items-center justify-center overflow-y-auto space-y-4 w-full mb-8 no-scrollbar mt-8 max-h-[26rem]">
+                {% for opinion in opinions %}
+                    <div class="flex-none w-72 h-20 bg-white rounded-xl p-4">
+                        <p class="text-xs">{{ opinion.content }}</p>
+                        <p class="text-xs font-semibold text-end">{{ opinion.pseudo }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div id="infinite-scroll-container-mobile" class="flex lg:hidden overflow-x-auto space-x-4 w-full mt-8">
+                {% for opinion in opinions %}
+                    <div class="flex-none w-64 bg-white p-4 rounded-xl">
+                        <p class="text-xs">{{ opinion.content }}</p>
+                        <p class="text-xs font-semibold text-end">{{ opinion.pseudo }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+    
+{# Desktop #}
+<div class="hidden lg:flex flex-col justify-center items-center w-full mt-36">
+    <div class="w-[80rem]">
+        <div class="w-full flex flex-col justify-center items-center">
+            <div class="px-4">
+                <h2 class="text-3xl font-extrabold text-white">Nos horaires d'ouverture</h2>
+            </div>
+        </div>
+        <div class="max-h-[26rem] overflow-hidden mt-8 gap-4 mb-8 bg-white p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style="width: 40rem;">
+            {% for hour in hours %}
+                <div class="flex flex-col justify-center items-center">
+                    <div>
+                        <p class="text-base font-semibold">{{ hour.name }}</p>
+                        <div class="flex flex-row gap-4">
+                            <p class="text-sm font-semibold text-end">{{ hour.start|date('H:i') }}</p>
+                            <p class="text-sm font-semibold text-end">{{ hour.end|date('H:i') }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{# Mobile #}
+<div class="flex lg:hidden flex-col justify-center items-center w-full mt-12 p-4">
+    <div class="w-full px-4">
+        <h2 class="text-2xl font-extrabold text-white text-center">Nos horaires d'ouverture</h2>
+    </div>
+    <div class="max-h-[26rem] overflow-auto mt-4 gap-4 bg-white p-4 rounded-xl grid grid-cols-2" style="width: 100%;">
+        {% for hour in hours %}
+            <div class="flex flex-col justify-center items-center">
+                <div>
+                    <p class="text-base font-semibold">{{ hour.name }}</p>
+                    <div class="flex flex-row gap-4">
+                        <p class="text-sm font-semibold text-end">{{ hour.start|date('H:i') }}</p>
+                        <p class="text-sm font-semibold text-end">{{ hour.end|date('H:i') }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+    
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const containerDesktop = document.getElementById('infinite-scroll-container-desktop');
+    const containerMobile = document.getElementById('infinite-scroll-container-mobile');
+    const containerDesktopVertical = document.getElementById('infinite-scroll-container-desktop-vertical');
+    let scrollSpeed = 0.5;  // Vitesse de défilement (ajustez selon vos besoins)
+    
+    // Fonction de défilement automatique pour défilement horizontal
+    function autoScrollHorizontal(container) {
+        container.scrollLeft += scrollSpeed;
+
+        if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
+            container.scrollLeft = 0;
+        }
+    }
+
+    // Fonction de défilement automatique pour défilement vertical
+    function autoScrollVertical(container) {
+        container.scrollTop += scrollSpeed;
+
+        if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+            container.scrollTop = 0;
+        }
+    }
+
+    setInterval(function() {
+        autoScrollHorizontal(containerDesktop);
+    }, 10);
+
+    setInterval(function() {
+        autoScrollVertical(containerDesktopVertical);
+    }, 10);
+
+    setInterval(function() {
+        autoScrollHorizontal(containerMobile);
+    }, 10);
+
+    // Observer pour ajouter des images à la fin pour desktop horizontal
+    let imagesDesktop = containerDesktop.children;
+    const observerDesktop = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                appendImages(imagesDesktop, containerDesktop);
+            }
+        });
+    });
+
+    if (imagesDesktop.length > 0) {
+        observerDesktop.observe(imagesDesktop[imagesDesktop.length - 1]);
+    }
+
+    // Observer pour ajouter des images à la fin pour desktop vertical
+    let imagesDesktopVertical = containerDesktopVertical.children;
+    const observerDesktopVertical = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                appendImages(imagesDesktopVertical, containerDesktopVertical);
+            }
+        });
+    });
+
+    if (imagesDesktopVertical.length > 0) {
+        observerDesktopVertical.observe(imagesDesktopVertical[imagesDesktopVertical.length - 1]);
+    }
+
+    // Observer pour mobile
+    let imagesMobile = containerMobile.children;
+    const observerMobile = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                appendImages(imagesMobile, containerMobile);
+            }
+        });
+    });
+
+    if (imagesMobile.length > 0) {
+        observerMobile.observe(imagesMobile[imagesMobile.length - 1]);
+    }
+
+    function appendImages(images, container) {
+        const numberOfImages = images.length;
+        for (let i = 0; i < numberOfImages; i++) {
+            const clone = images[i].cloneNode(true);
+            container.appendChild(clone);
+        }
+    }
+});
+
+let swiper = new Swiper('#swiperContainer', {
+    slidesPerView: 'auto',
+    spaceBetween: 10,
+    centeredSlides: true,
+    loop: true,
+    observer: true,
+    observeParents: true,
+    autoplay: {
+        delay: 3500,
+        disableOnInteraction: false,
+    },
+});
+</script>
+
 {% endblock %}

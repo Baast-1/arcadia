@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Hours{% endblock %}
+
+{% block content %}
+    <h1 class="text-2xl font-bold mb-4">Nouveau</h1>
+
+    {{ include('hours/_form.html.twig') }}
+
+    <a href="{{ path('app_hours_index') }}">back to list</a>
+{% endblock %}
