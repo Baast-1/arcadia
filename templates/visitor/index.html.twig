@@ -91,10 +91,10 @@
 </div>
 
 {# Mobile #}
-<div class="lg:hidden flex flex-col justify-center items-center w-full mt-12">
+<div class="lg:hidden flex flex-col justify-center items-center w-full mt-16">
     <div style="max-width: 22rem;">
         <div class="w-full flex flex-col justify-center items-center">
-            <div class="px-4 mt-24">
+            <div class="px-4">
                 <h1 class="text-2xl font-extrabold text-white text-center mb-4">Les Habitats du Zoo</h1>
             </div>
             <div class="mb-4">
@@ -167,10 +167,10 @@
 </div>
 
 {# Mobile #}
-<div class="lg:hidden flex flex-col justify-center items-center w-full mt-12">
+<div class="lg:hidden flex flex-col justify-center items-center w-full mt-16">
     <div style="max-width: 22rem;">
         <div class="w-full flex flex-col justify-center items-center">
-            <div class="px-4 mt-24">
+            <div class="px-4">
                 <h1 class="text-2xl font-extrabold text-white text-center mb-4">Les Services du Zoo</h1>
             </div>
             <div class="mb-4">
@@ -199,7 +199,7 @@
 </div>
 
 {# Desktop - Mobile #}
-<div class="flex flex-col justify-center items-center w-full mt-36 lg:mt-12">
+<div class="flex flex-col justify-center items-center w-full mt-16 lg:mt-32">
     <div class="max-w-[80rem]">
         <div class="w-full flex flex-col justify-center items-center">
             <div class="px-2">
@@ -252,7 +252,8 @@
                 <h2 class="text-3xl font-extrabold text-white">Nos horaires d'ouverture</h2>
             </div>
         </div>
-        <div class="max-h-[26rem] overflow-hidden mt-8 gap-4 mb-8 bg-white p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style="width: 40rem;">
+        <div class="flex justify-center items-center">
+            <div class="max-h-[26rem] overflow-hidden mt-8 gap-4 mb-8 bg-white p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style="width: 40rem;">
             {% for hour in hours %}
                 <div class="flex flex-col justify-center items-center">
                     <div>
@@ -264,6 +265,7 @@
                     </div>
                 </div>
             {% endfor %}
+        </div>
         </div>
     </div>
 </div>
@@ -295,9 +297,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const containerDesktop = document.getElementById('infinite-scroll-container-desktop');
     const containerMobile = document.getElementById('infinite-scroll-container-mobile');
     const containerDesktopVertical = document.getElementById('infinite-scroll-container-desktop-vertical');
-    let scrollSpeed = 0.5;  // Vitesse de défilement (ajustez selon vos besoins)
-    
-    // Fonction de défilement automatique pour défilement horizontal
+    let scrollSpeed = 1;
+
     function autoScrollHorizontal(container) {
         container.scrollLeft += scrollSpeed;
 
@@ -306,7 +307,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Fonction de défilement automatique pour défilement vertical
     function autoScrollVertical(container) {
         container.scrollTop += scrollSpeed;
 
@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function() {
         autoScrollHorizontal(containerMobile);
     }, 10);
 
-    // Observer pour ajouter des images à la fin pour desktop horizontal
+
     let imagesDesktop = containerDesktop.children;
     const observerDesktop = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -341,7 +341,6 @@ document.addEventListener('DOMContentLoaded', function() {
         observerDesktop.observe(imagesDesktop[imagesDesktop.length - 1]);
     }
 
-    // Observer pour ajouter des images à la fin pour desktop vertical
     let imagesDesktopVertical = containerDesktopVertical.children;
     const observerDesktopVertical = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -355,7 +354,6 @@ document.addEventListener('DOMContentLoaded', function() {
         observerDesktopVertical.observe(imagesDesktopVertical[imagesDesktopVertical.length - 1]);
     }
 
-    // Observer pour mobile
     let imagesMobile = containerMobile.children;
     const observerMobile = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

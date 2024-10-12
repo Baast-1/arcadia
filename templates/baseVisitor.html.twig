@@ -18,7 +18,13 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between bg-gradient">
     {{ include ('_includes/_header.html.twig') }}
-
+    {% for label, messages in app.flashes %}
+        <div class="flash-popup flash-{{ label }} fixed bottom-5 right-5 w-72 p-4 rounded-lg shadow-lg z-50 bg-gray-100 text-gray-800">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
     {% block body %}
     {% endblock %}
 

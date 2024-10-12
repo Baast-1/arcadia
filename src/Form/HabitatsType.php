@@ -17,7 +17,6 @@ class HabitatsType extends AbstractType
         $builder
             ->add('name')
             ->add('description', TextareaType::class, [
-                'attr' => ['class' => 'tinymce'],
                 'required' => false,
             ])
             ->add('picture', FileType::class, [

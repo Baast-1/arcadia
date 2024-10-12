@@ -1,15 +1,169 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseVisitor.html.twig' %}
 
 {% block title %}Habitats{% endblock %}
 
 {% block body %}
-    {% for habitat in habitats %}
-        <div>
-            <h2>{{ habitat.name }}</h2>
-            <div>{{ habitat.description|raw }}</div>
-            {% if habitat.picture %}
-                <img src="{{ asset('uploads/' ~ habitat.picture.filename) }}" class="w-12 h-12 cover" alt="Service Picture">
-            {% endif %}
+<div class="flex flex-col justify-center items-center w-full mt-24 lg:mt-36">
+    <div class="max-w-[80rem] w-full px-4">
+        <div class="w-full flex flex-col justify-center items-center">
+            <h2 class="text-3xl font-extrabold text-white">Nos Habitats</h2>
         </div>
-    {% endfor %}
+
+        <div class="w-full max-h-[26rem] overflow-hidden mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {% for habitat in habitats %}
+            <div class="relative w-full h-full group cursor-pointer" 
+                 onclick="showHabitatDetails('{{ habitat.name|e('js') }}', '{{ habitat.description|e('js') }}')">
+                <img alt="{{ habitat.name }}" class="w-full h-full object-cover object-bottom rounded-2xl group-hover:brightness-50" 
+                     src="{{ asset('uploads/' ~ habitat.picture) }}"/>
+                <p class="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 px-2 py-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity">
+                    {{ habitat.name }}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div id="habitat-details" class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 hidden">
+            <div>
+                <h3 id="habitat-name" class="text-base font-bold text-white lg:text-xl"></h3>
+                <p id="habitat-description" class="text-white text-justify text-sm lg:text-base"></p>
+            </div>
+            <div>
+                <div id="habitat-animals" class="gap-4 flex flex-wrap justify-center">
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            <div id="animal-details" class="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 hidden">
+                <div class="md:col-span-2">
+                    <img id="animal-picture-1" src="" alt="Animal sélectionné" class="w-full h-full object-cover rounded-xl">
+                </div>
+                
+                <div class="grid grid-rows-2 gap-4">
+                    <div class="w-full h-auto">
+                        <img id="animal-picture-2" src="" alt="Animal sélectionné" class="w-full h-full object-cover rounded-xl">
+                    </div>
+                    <div class="w-full h-auto">
+                        <img id="animal-picture-3" src="" alt="Animal sélectionné" class="w-full h-full object-cover rounded-xl">
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex flex-col">
+                <div class="flex flex-col md:flex-row items-start md:items-center gap-4">
+                    <h3 id="animal-name" class="text-2xl font-bold text-white"></h3>
+                    <p id="animal-breed" class="text-white font-medium text-lg"></p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 mt-4">
+                    <p id="reports-state" class="text-white text-sm lg:text-base"></p>
+                    <p id="reports-food" class="text-white text-sm lg:text-base"></p>
+                    <p id="reports-food_weight" class="text-white text-sm lg:text-base"></p>
+                </div>
+                <p id="reports-detail_state" class="text-white mt-4 text-sm lg:text-base"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showHabitatDetails(name, description) {
+        document.getElementById('habitat-name').textContent = name;
+        document.getElementById('habitat-description').textContent = description;
+
+        const animalsContainer = document.getElementById('habitat-animals');
+        animalsContainer.innerHTML = '';
+
+        const habitatData = JSON.parse('{{ habitats | json_encode | e('js') }}');
+
+        const selectedHabitat = habitatData.find(h => h.name === name);
+
+        if (selectedHabitat && selectedHabitat.animals) {
+            selectedHabitat.animals.forEach(animal => {
+                if (animal.pictures.length > 0) {
+                    const picture = animal.pictures[0];
+                    const div = document.createElement('div');
+                    div.classList.add('relative', 'w-40', 'h-40', 'rounded-full', 'overflow-hidden', 'flex', 'items-center', 'justify-center', 'cursor-pointer', 'group');
+
+                    const img = document.createElement('img');
+                    img.src = '/uploads/' + picture.filename;
+                    img.alt = animal.name;
+                    img.classList.add('w-full', 'h-full', 'object-cover', 'rounded-full');
+
+                    const span = document.createElement('span');
+                    span.textContent = animal.name;
+                    span.classList.add('absolute', 'inset-0', 'flex', 'items-center', 'justify-center', 'text-white', 'bg-black', 'bg-opacity-50', 'opacity-0', 'group-hover:opacity-100', 'transition-opacity');
+
+                    div.appendChild(img);
+                    div.appendChild(span);
+                    
+                    div.onclick = function () {
+                        showAnimalDetails(animal);
+                    };
+
+                    animalsContainer.appendChild(div);
+                }
+            });
+        } else {
+            console.error('Habitat not found or no animals available for habitat:', name);
+        }
+
+        document.getElementById('habitat-details').classList.remove('hidden');
+    }
+
+    function showAnimalDetails(animal) {
+        document.getElementById('animal-name').textContent = animal.name;
+        document.getElementById('animal-breed').textContent = animal.breed;
+        console.log(animal);
+
+        if (animal.pictures.length > 0) {
+            document.getElementById('animal-picture-1').src = '/uploads/' + animal.pictures[0].filename;
+        }
+        if (animal.pictures.length > 1) {
+            document.getElementById('animal-picture-2').src = '/uploads/' + animal.pictures[1].filename;
+        } else {
+            document.getElementById('animal-picture-2').src = '';
+        }
+        if (animal.pictures.length > 2) {
+            document.getElementById('animal-picture-3').src = '/uploads/' + animal.pictures[2].filename;
+        } else {
+            document.getElementById('animal-picture-3').src = '';
+        }
+
+        if (animal.reports && animal.reports.length > 0) {
+            const latestReport = animal.reports[animal.reports.length - 1];
+
+            document.getElementById('reports-state').textContent = 'État : ' + latestReport.state;
+            document.getElementById('reports-food').textContent = 'Nourriture : ' + latestReport.food;
+            document.getElementById('reports-food_weight').textContent = 'Poids de la nourriture : ' + latestReport.food_weight + 'kg';
+            document.getElementById('reports-detail_state').textContent = 'Détails : ' + latestReport.detail_state;
+        } else {
+            document.getElementById('reports-state').textContent = 'État : N/A';
+            document.getElementById('reports-food').textContent = 'Nourriture : N/A';
+            document.getElementById('reports-food_weight').textContent = 'Poids de la nourriture : N/A';
+            document.getElementById('reports-detail_state').textContent = 'Détails : N/A';
+        }
+
+        document.getElementById('animal-details').classList.remove('hidden');
+
+        fetch(`/view/${animal.id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.views !== undefined) {
+                console.log(`Animal ${animal.id} now has ${data.views} views.`);
+            } else {
+                console.error('Error incrementing views:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Request failed:', error);
+        });
+
+    }
+</script>
+
 {% endblock %}
