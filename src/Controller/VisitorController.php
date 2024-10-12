@@ -4,14 +4,15 @@ namespace App\Controller;
 
 use App\Document\Opinions;
 use App\Form\ContactFormType;
-use App\Form\OpinionsType;
 use App\Form\OpinionsVisitorType;
 use App\Repository\AnimalsRepository;
 use App\Repository\HabitatsRepository;
 use App\Repository\HoursRepository;
 use App\Repository\ServicesRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -25,19 +26,23 @@ class VisitorController extends AbstractController
     private $animalsRepository;
     private $hoursRepository;
     private $dm;
+    private $entityManager;
 
     public function __construct(
         ServicesRepository $servicesRepository,
         HabitatsRepository $habitatsRepository,
         AnimalsRepository $animalsRepository,
         HoursRepository $hoursRepository,
-        DocumentManager $dm
+        DocumentManager $dm,
+        EntityManagerInterface $entityManager
+        
     ) {
         $this->servicesRepository = $servicesRepository;
         $this->habitatsRepository = $habitatsRepository;
         $this->animalsRepository = $animalsRepository;
         $this->hoursRepository = $hoursRepository;
         $this->dm = $dm;
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/', name: 'app_visitor')]
@@ -81,60 +86,74 @@ class VisitorController extends AbstractController
     #[Route('/nos-habitats', name: 'app_visitor_habitats')]
     public function habitats(): Response
     {
+        $habitats = $this->habitatsRepository->findAll();
+        
+        $habitatsArray = array_map(function ($habitat) {
+            return $habitat->toArray();
+        }, $habitats);
+        
         return $this->render('visitor/habitats.html.twig', [
-            'habitats' => $this->habitatsRepository->findAll(),
+            'habitats' => $habitatsArray,
         ]);
     }
+
+    #[Route('/view/{id}', name: 'app_view', methods: ['POST'])]
+    public function incrementView(int $id): JsonResponse
+    {
+        try {
+            $animal = $this->animalsRepository->find($id);
+            
+            if (!$animal) {
+                return new JsonResponse(['error' => 'Animal not found'], 404);
+            }
+            if ($animal->getView() === null) {
+                $animal->setView(0);
+            }
+            $animal->setView($animal->getView() + 1);
+            $this->entityManager->flush();
+
+            return new JsonResponse(['view' => $animal->getView()]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
 
     #[Route('/contact', name: 'app_visitor_contact')]
     public function contact(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ContactFormType::class);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-            
-            // Envoi de l'e-mail
+    
+            // Création et envoi de l'e-mail
             $email = (new Email())
-                ->from('noreply@croisieresburdigala.fr')
+                ->from('votre-email@example.com')
                 ->replyTo($formData['email'])
-                ->to('contact@croisieresburdigala.fr')
-                // ->to('bastien.ter@gmail.com')
-                ->subject('Demande d\'information')
+                ->to('destinataire@example.com')
+                ->subject('Demande de Contact')
                 ->html("
-                    <p>Qui êtes-vous : {$formData['who']}</p>
-                    <p>Nom : {$formData['nom']}</p>
-                    <p>Prénom : {$formData['prenom']}</p>
+                    <p>Nom : {$formData['name']}</p>
                     <p>Email : {$formData['email']}</p>
-                    <p>Téléphone : {$formData['telephone']}</p>
-                    <p>Comment voulez-vous être recontacté : " . (isset($formData['recontact']) ? implode(', ', $formData['recontact']) : 'Aucun') . "</p>
-                    <p>Votre demande : {$formData['demande']}</p>
-                    <p>Nombre de convives : {$formData['convives']}</p>
-                    <p>Date souhaitée : {$formData['date']->format('d-m-Y')}</p>
+                    <p>Message : {$formData['message']}</p>
                 ");
-
-            $mailer->send($email);
-
-            // Redirection avec un message de confirmation
-            return $this->redirectToRoute('app_contact_success');
+    
+            try {
+                $mailer->send($email);
+                $this->addFlash('success', 'Votre message a été envoyé avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de votre message.');
+            }
+    
+            // Redirection vers une page de succès
+            return $this->redirectToRoute('app_visitor_contact');
         }
-
-        return $this->render('Front/contact.html.twig', [
-            'form' => $form->createView(), // Passer la variable 'form' au template Twig
+    
+        return $this->render('visitor/contact.html.twig', [
+            'form' => $form->createView(),
         ]);
-    }
-
-    #[Route('/contact/success', name: 'app_contact_success')]
-    public function contactSuccess(): Response
-    {
-        // Affichage d'un message de confirmation
-        $response = new Response('Votre demande a bien été envoyée. Vous allez être automatiquement redirigé.');
-    
-        // Ajout du script JavaScript pour la redirection après 4 secondes
-        $response->headers->set('refresh', '4;url=' . $this->generateUrl('app_contact'));
-    
-        return $response;
     }
 
     #[Route('/horaires', name: 'app_visitor_hours')]

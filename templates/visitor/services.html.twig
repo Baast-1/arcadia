@@ -4,27 +4,27 @@
 
 {% block body %}
 
-{# Desktop #}
-<div class="flex flex-col justify-center items-center w-full mt-20 lg:mt-36">
+{# Responsive Container #}
+<div class="flex flex-col justify-center items-center w-full mt-24 lg:mt-36">
     <div class="max-w-[80rem] w-full px-4">
         <h1 class="text-2xl lg:text-3xl font-extrabold text-white text-center mb-4">Nos Services</h1>
+        
         {% for service in services %}
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 bg-white mb-4 p-4 rounded-2xl">
-                <div class="flex flex-col justify-center items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 bg-white mt-12 p-4 rounded-2xl w-full h-auto md:h-[20rem]">
+                <div class="flex flex-col justify-center items-start">
                     <h2 class="text-xl font-semibold text-justify">{{ service.name }}</h2>
-                    <div class="mt-2 text-sm lg:text-base text-justify">{{ service.description|raw }}</div>
+                    <div class="mt-2 p-4 text-sm lg:text-base text-justify">{{ service.description }}</div>
                 </div>
                 {% if service.picture %}
-                <div class="flex justify-center items-center">
-                    <div class="w-9/12 h-9/12 ">
-                        <img src="{{ asset('uploads/' ~ service.picture.filename) }}" class="w-full h-full object-cover rounded-lg" alt="Service Picture">
+                <div class="flex justify-center items-center overflow-hidden rounded-xl">
+                    <div class="max-w-full max-h-full">
+                        <img src="{{ asset('uploads/' ~ service.picture.filename) }}" class="w-full h-full object-cover" alt="Service Picture">
                     </div>
                 </div>
                 {% endif %}
             </div>
         {% endfor %}
-        </div>
     </div>
 </div>
-{% endblock %}
 
+{% endblock %}

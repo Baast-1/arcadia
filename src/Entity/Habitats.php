@@ -183,4 +183,36 @@ class Habitats
 
         return $this;
     }
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'picture' => $this->getPicture() ? $this->getPicture()->getFilename() : null,
+            'animals' => array_map(function ($animal) {
+                return [
+                    'id' => $animal->getId(),
+                    'name' => $animal->getName(),
+                    'breed' => $animal->getBreed(),
+                    'pictures' => array_map(function ($picture) {
+                        return [
+                            'filename' => $picture->getFilename(),
+                        ];
+                    }, $animal->getPictures()->toArray()),
+                    'reports' => array_map(function ($report) {
+                        return [
+                            'id' => $report->getId(),
+                            'animal_id' => $report->getAnimal(),
+                            'state' => $report->getState(),
+                            'food' => $report->getFood(),
+                            'food_weight' => $report->getFoodWeight(),
+                            'time' => $report->getTime(),
+                            'detail_state' => $report->getDetailState(),
+                        ];
+                    }, $animal->getReports()->toArray()), // Récupération des rapports pour chaque animal
+                ];
+            }, $this->getAnimals()->toArray()), // Récupération des animaux
+        ];
+    }
 }

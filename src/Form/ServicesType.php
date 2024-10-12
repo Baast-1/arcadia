@@ -19,8 +19,10 @@ class ServicesType extends AbstractType
         $builder
             ->add('name')
             ->add('description', TextareaType::class, [
-                'attr' => ['class' => 'tinymce'],
                 'required' => false,
+                'attr' => [
+                    'maxlength' => 500,
+                ],
             ])
             ->add('picture', FileType::class, [
                 'label' => 'Télécharger une image',
