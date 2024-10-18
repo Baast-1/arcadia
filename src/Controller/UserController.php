@@ -63,7 +63,7 @@ final class UserController extends AbstractController
                     $this->mailer->send($email);
                     $this->addFlash('success', 'Utilisateur créé et email envoyé avec succès !');
                 } catch (\Exception $emailException) {
-                    $this->addFlash('warning', 'Utilisateur créé, mais l\'envoi de l\'email a échoué : ' . $emailException->getMessage());
+                    $this->addFlash('error', 'Utilisateur créé, mais l\'envoi de l\'email a échoué');
                 }
 
             } catch (\Exception $e) {

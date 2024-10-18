@@ -52,7 +52,7 @@ class VisitorController extends AbstractController
         $habitats = $this->habitatsRepository->findAll();
         $services = $this->servicesRepository->findAll();
         $hours = $this->hoursRepository->findAll();
-        $opinions = $this->dm->getRepository(Opinions::class)->findAll();
+        $opinions = $this->dm->getRepository(Opinions::class)->findBy(['is_visible' => true]);
         $opinion = new Opinions();
         $form = $this->createForm(OpinionsVisitorType::class, $opinion);
         $form->handleRequest($request);

@@ -8,10 +8,10 @@
     <div class="max-w-[80rem]">
         <div class="w-full flex flex-col justify-center items-center">
             <div class="px-4">
-                <h1 class="text-3xl font-extrabold text-white">Bienvenue au zoo Arcadia</h1>
+                <h1 class="text-3xl font-extrabold text-custom-4">Bienvenue au zoo Arcadia</h1>
             </div>
             <div class="p-4 max-w-4xl">
-                <p class="text-base font-normal text-white text-justify">
+                <p class="text-base font-normal text-custom-4 text-justify">
                     Niché près de la légendaire forêt de Brocéliande en Bretagne, le Zoo Arcadia est un refuge pour des animaux venant des
                     quatre coins du monde depuis 1960. Notre zoo incarne des valeurs d’écologie et d’indépendance énergétique, offrant un 
                     cadre sécurisé et respectueux de la nature à nos résidents à poils, plumes et écailles.
@@ -29,12 +29,12 @@
     <div style="max-width: 22rem;">
         <div class="w-full flex flex-col justify-center items-center">
             <div class="px-4">
-                <h2 class="text-3xl font-extrabold text-white text-center mb-4">Bienvenue au zoo <br>
+                <h2 class="text-3xl font-extrabold text-custom-4 text-center mb-4">Bienvenue au zoo <br>
                     Arcadia
                 </h2>
             </div>
             <div class="mb-4">
-                <p class="text-sm font-normal text-white text-justify">
+                <p class="text-sm font-normal text-custom-4 text-justify">
                     Niché près de la légendaire forêt de Brocéliande en Bretagne, le Zoo Arcadia est un refuge pour des animaux venant des
                     quatre coins du monde depuis 1960. Notre zoo incarne des valeurs d’écologie et d’indépendance énergétique, offrant un 
                     cadre sécurisé et respectueux de la nature à nos résidents à poils, plumes et écailles.
@@ -52,10 +52,10 @@
     <div class="max-w-[80rem]">
         <div class="w-full flex flex-col justify-center items-center">
             <div class="px-4">
-                <h2 class="text-3xl font-extrabold text-white">Les Habitats du Zoo</h2>
+                <h2 class="text-3xl font-extrabold text-custom-4">Les Habitats du Zoo</h2>
             </div>
             <div class="p-4 max-w-4xl">
-                <p class="text-base font-normal text-white text-justify">
+                <p class="text-base font-normal text-custom-4 text-justify">
                     Au Zoo Arcadia, nous avons recréé plusieurs habitats naturels pour que nos animaux puissent vivre dans un environnement
                     qui ressemble à leur milieu d'origine. Explorez la Savane, la Jungle ou les Marais, et découvrez des animaux fascinants dans
                     un cadre respectueux de la nature.
@@ -66,7 +66,7 @@
         {% for habitat in habitats %}
             <div class="relative w-full h-full group cursor-pointer">
                 <img alt="main-picture" class="w-full h-full object-cover object-bottom rounded-2xl cursor-pointer group-hover:brightness-50" src="{{ asset('uploads/' ~ habitat.picture.filename) }}"/>
-                <p class="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 px-2 py-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity">{{ habitat.name }}</p>
+                <p class="absolute inset-0 flex items-center justify-center text-custom-4 bg-black bg-opacity-50 px-2 py-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity">{{ habitat.name }}</p>
             </div>
         {% endfor %}
         </div>
@@ -95,10 +95,10 @@
     <div style="max-width: 22rem;">
         <div class="w-full flex flex-col justify-center items-center">
             <div class="px-4">
-                <h1 class="text-2xl font-extrabold text-white text-center mb-4">Les Habitats du Zoo</h1>
+                <h1 class="text-2xl font-extrabold text-custom-4 text-center mb-4">Les Habitats du Zoo</h1>
             </div>
             <div class="mb-4">
-                <p class="text-sm font-normal text-white text-justify">
+                <p class="text-sm font-normal text-custom-4 text-justify">
                     Au Zoo Arcadia, nous avons recréé plusieurs habitats naturels pour que nos animaux puissent vivre dans un environnement
                     qui ressemble à leur milieu d'origine. Explorez la Savane, la Jungle ou les Marais, et découvrez des animaux fascinants dans
                     un cadre respectueux de la nature.
@@ -142,10 +142,10 @@
     <div class="max-w-[80rem]">
         <div class="w-full flex flex-col justify-center items-center">
             <div class="px-4">
-                <h2 class="text-3xl font-extrabold text-white">Les Services du Zoo</h2>
+                <h2 class="text-3xl font-extrabold text-custom-4">Les Services du Zoo</h2>
             </div>
             <div class="p-4 max-w-4xl">
-                <p class="text-base font-normal text-white text-justify">
+                <p class="text-base font-normal text-custom-4 text-justify">
                     Lors de votre visite, profitez de nos différents services pour rendre votre journée encore plus agréable : dégustez un repas 
                     dans notre restaurant, suivez nos visites guidées pour en apprendre plus sur nos animaux, ou laissez-vous emporter par une
                     balade en petit train à travers le zoo.
@@ -156,7 +156,7 @@
         {% for service in services %}
             <div class="relative w-full h-full group cursor-pointer">
                 <img alt="main-picture" class="max-w-[20rem] h-auto object-cover object-bottom rounded-2xl cursor-pointer group-hover:brightness-50" src="{{ asset('uploads/' ~ service.picture.filename) }}"/>
-                <p class="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 px-2 py-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity">{{ service.name }}</p>
+                <p class="absolute inset-0 flex items-center justify-center text-custom-4 bg-black bg-opacity-50 px-2 py-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity">{{ service.name }}</p>
             </div>
         {% endfor %}
         </div>
@@ -171,10 +171,10 @@
     <div style="max-width: 22rem;">
         <div class="w-full flex flex-col justify-center items-center">
             <div class="px-4">
-                <h1 class="text-2xl font-extrabold text-white text-center mb-4">Les Services du Zoo</h1>
+                <h1 class="text-2xl font-extrabold text-custom-4 text-center mb-4">Les Services du Zoo</h1>
             </div>
             <div class="mb-4">
-                <p class="text-sm font-normal text-white text-justify">
+                <p class="text-sm font-normal text-custom-4 text-justify">
                     Lors de votre visite, profitez de nos différents services pour rendre votre journée encore plus agréable : dégustez un repas 
                     dans notre restaurant, suivez nos visites guidées pour en apprendre plus sur nos animaux, ou laissez-vous emporter par une
                     balade en petit train à travers le zoo.
@@ -203,19 +203,19 @@
     <div class="max-w-[80rem]">
         <div class="w-full flex flex-col justify-center items-center">
             <div class="px-2">
-                <h2 class="text-2xl text-center sm:text-3xl font-extrabold text-white">Ce que nos visiteurs disent de nous</h2>
+                <h2 class="text-2xl text-center sm:text-3xl font-extrabold text-custom-4">Ce que nos visiteurs disent de nous</h2>
             </div>
         </div>
         <div class="w-full max-h-[26rem] overflow-hidden  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 mb-8">
             <div class="p-4 w-full">
                 {{ form_start(form, {'attr': {'class': 'space-y-4 flex flex-col justify-center item-center mt-4'}}) }}
                 <div>
-                    {{ form_label(form.pseudo, 'Votre pseudo', {'label_attr': {'class': 'block text-sm font-semibold text-black'}}) }}
+                    {{ form_label(form.pseudo, 'Votre pseudo', {'label_attr': {'class': 'block text-sm font-semibold text-custom-1'}}) }}
                     {{ form_widget(form.pseudo, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
                     {{ form_errors(form.pseudo, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
                 </div>
                 <div>
-                    {{ form_label(form.content, 'Votre avis', {'label_attr': {'class': 'block text-sm font-semibold text-black'}}) }}
+                    {{ form_label(form.content, 'Votre avis', {'label_attr': {'class': 'block text-sm font-semibold text-custom-1'}}) }}
                     {{ form_widget(form.content, {'attr': {'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
                     {{ form_errors(form.content, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
                 </div>
@@ -249,7 +249,7 @@
     <div class="w-[80rem]">
         <div class="w-full flex flex-col justify-center items-center">
             <div class="px-4">
-                <h2 class="text-3xl font-extrabold text-white">Nos horaires d'ouverture</h2>
+                <h2 class="text-3xl font-extrabold text-custom-4">Nos horaires d'ouverture</h2>
             </div>
         </div>
         <div class="flex justify-center items-center">
@@ -273,7 +273,7 @@
 {# Mobile #}
 <div class="flex lg:hidden flex-col justify-center items-center w-full mt-12 p-4">
     <div class="w-full px-4">
-        <h2 class="text-2xl font-extrabold text-white text-center">Nos horaires d'ouverture</h2>
+        <h2 class="text-2xl font-extrabold text-custom-4 text-center">Nos horaires d'ouverture</h2>
     </div>
     <div class="max-h-[26rem] overflow-auto mt-4 gap-4 bg-white p-4 rounded-xl grid grid-cols-2" style="width: 100%;">
         {% for hour in hours %}
