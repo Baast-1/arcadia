@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/hours')]
 final class HoursController extends AbstractController
@@ -30,10 +30,14 @@ final class HoursController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($hour);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_hours_index', [], Response::HTTP_SEE_OTHER);
+            try {
+                $entityManager->persist($hour);
+                $entityManager->flush();
+                $this->addFlash('success', 'Heure ajoutée avec succès.');
+                return $this->redirectToRoute('app_hours_index', [], Response::HTTP_SEE_OTHER);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout de l\'heure.');
+            }
         }
 
         return $this->render('hours/new.html.twig', [
@@ -57,9 +61,13 @@ final class HoursController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_hours_index', [], Response::HTTP_SEE_OTHER);
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', 'Heure modifiée avec succès.');
+                return $this->redirectToRoute('app_hours_index', [], Response::HTTP_SEE_OTHER);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'heure.');
+            }
         }
 
         return $this->render('hours/edit.html.twig', [
@@ -71,9 +79,14 @@ final class HoursController extends AbstractController
     #[Route('/{id}', name: 'app_hours_delete', methods: ['POST'])]
     public function delete(Request $request, Hours $hour, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$hour->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($hour);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$hour->getId(), $request->get('_token'))) {
+            try {
+                $entityManager->remove($hour);
+                $entityManager->flush();
+                $this->addFlash('success', 'Heure supprimée avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la suppression de l\'heure.');
+            }
         }
 
         return $this->redirectToRoute('app_hours_index', [], Response::HTTP_SEE_OTHER);

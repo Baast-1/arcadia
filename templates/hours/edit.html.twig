@@ -1,13 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Hours{% endblock %}
+{% block title %}Modifier une horaire{% endblock %}
 
 {% block content %}
-    <h1 class="text-2xl font-bold mb-4">Modifier {{ hours.name }}</h1>
-
-    {{ include('hours/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_hours_index') }}">back to list</a>
-
-    {{ include('hours/_delete_form.html.twig') }}
+    <h1 class="text-2xl font-bold mb-4">{{ hour.name }}</h1>
+    {{ include('hours/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 {% endblock %}
