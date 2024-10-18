@@ -5,13 +5,13 @@
         <img alt="logo" class=" h-20 w-20 rounded-full" src="{{ asset('/picture/logo.webp') }}"/>
     </div>
     <nav class="hidden lg:flex items-center justify-center gap-x-12 mx-auto bg-white px-8 rounded-2xl shadow-lg"> 
-        <a href="{{ path('app_visitor') }}" class="mx-2 text-black cursor-pointer font-medium hover:font-semibold">Accueil</a>
-        <a href="{{ path('app_visitor_services') }}" class="mx-2 text-black cursor-pointer font-medium hover:font-semibold p-2">Services</a>
-        <a href="{{ path('app_visitor_habitats') }}" class="mx-2 text-black cursor-pointer font-medium hover:font-semibold p-2">Habitats</a>
-        <a href="{{ path('app_visitor_contact') }}" class="mx-2 text-black cursor-pointer font-medium hover:font-semibold p-2">Contact</a>
+        <a href="{{ path('app_visitor') }}" class="mx-2 text-custom-1 cursor-pointer font-medium hover:font-semibold">Accueil</a>
+        <a href="{{ path('app_visitor_services') }}" class="mx-2 text-custom-1 cursor-pointer font-medium hover:font-semibold p-2">Services</a>
+        <a href="{{ path('app_visitor_habitats') }}" class="mx-2 text-custom-1 cursor-pointer font-medium hover:font-semibold p-2">Habitats</a>
+        <a href="{{ path('app_visitor_contact') }}" class="mx-2 text-custom-1 cursor-pointer font-medium hover:font-semibold p-2">Contact</a>
     </nav>
     <div class="flex justify-center items-center w-20">
-        <a class=" px-8 py-2  rounded-full text-black font-medium hover:font-semibold p-2"></a>
+        <a class=" px-8 py-2  rounded-full text-custom-1 font-medium hover:font-semibold p-2"></a>
     </div>
 </header>
 
@@ -22,7 +22,7 @@
     </div>
     <div class="lg:hidden px-2">
         <button id="burgerMenu" class="focus:outline-none">
-            <svg class="h-8 w-8 rounded-full text-black fill-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="h-8 w-8 rounded-full text-custom-1 fill-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
         </button>
@@ -35,10 +35,10 @@
     <div class="bg-white rounded-lg p-8 mx-auto mt-20 max-w-md" style="width:90%">
         <nav class="flex flex-col gap-4">
             <nav class="flex flex-col gap-12 items-center underline-offset-8 font-custom">
-                <a href="{{ path('app_visitor') }}" class="text-black  font-medium border-b-2 border-transparent hover:border-[#083061] transition">Accueil</a>
-                <a href="{{ path('app_visitor_services') }}" class="text-black  font-medium border-b-2 border-transparent hover:border-[#083061] transition">Services</a>
-                <a href="{{ path('app_visitor_habitats') }}" class="text-black  font-medium border-b-2 border-transparent hover:border-[#083061] transition">Habitats</a>
-                <a href="{{ path('app_visitor_contact') }}" class="text-black  font-medium border-b-2 border-transparent hover:border-[#083061] transition">Contact</a>
+                <a href="{{ path('app_visitor') }}" class="text-custom-1  font-medium border-b-2 border-transparent hover:border-[#083061] transition">Accueil</a>
+                <a href="{{ path('app_visitor_services') }}" class="text-custom-1  font-medium border-b-2 border-transparent hover:border-[#083061] transition">Services</a>
+                <a href="{{ path('app_visitor_habitats') }}" class="text-custom-1  font-medium border-b-2 border-transparent hover:border-[#083061] transition">Habitats</a>
+                <a href="{{ path('app_visitor_contact') }}" class="text-custom-1  font-medium border-b-2 border-transparent hover:border-[#083061] transition">Contact</a>
             </nav>
         </nav>
     </div>
