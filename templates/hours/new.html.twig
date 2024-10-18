@@ -3,9 +3,6 @@
 {% block title %}New Hours{% endblock %}
 
 {% block content %}
-    <h1 class="text-2xl font-bold mb-4">Nouveau</h1>
-
+    <h1 class="text-2xl font-bold mb-4">Nouvel horaire</h1>
     {{ include('hours/_form.html.twig') }}
-
-    <a href="{{ path('app_hours_index') }}">back to list</a>
 {% endblock %}
