@@ -1,42 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Habitats{% endblock %}
+{% block title %}Voir un habitat{% endblock %}
 
 {% block content %}
-    <h1 class="text-2xl font-bold mb-4">{{ habitat.name }}</h1>
+    <h1 class="text-2xl font-bold mb-4 mt-8">{{ habitat.name }}</h1>
+    <div class="flex flex-col justify-center items-center relative z-10"> 
+        <div class="grid grid-cols-2 gap-4 p-8 w-10/12">
+            <div class="flex flex-col w-full">
+                <p class="font-semibold text-lg ">Nom</p>
+                <div class="font-normal text-base">{{ habitat.name }}</div>
+            </div>
+            <div class="flex flex-col w-full">
+                <p class="font-semibold text-lg ">Image</p>
+                <div class="font-normal text-base"><img src="{{ asset('uploads/' ~ habitat.picture.filename) }}" class="cover rounded-xl" alt="habitat Picture"></td></div>
+            </div>
+            <div class="flex flex-col w-full col-span-2">
+                <p class="font-semibold text-lg ">Description</p>
+                <div class="font-normal text-base">{{ habitat.description }}</div>
+            </div>
+        </div>
+        <div class="flex justify-center items-center gap-8">
+            <a class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" href="{{ path('app_habitats_edit', {'id': habitat.id}) }}">Modifier</a>
+            <button class="py-2 px-6 bg-custom-5 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" id="delete-button">Supprimer</button>
+        </div>
+    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Name</th>
-                <td>{{ habitat.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ habitat.description|raw }}</td>
-            <tr>
-                <th>Picture</th>
-                <td>
-                    {% if habitat.picture %}
-                        <img src="{{ asset('uploads/' ~ habitat.picture.filename) }}" class="w-12 h-12 cover" alt="habitat Picture">
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>Commentaire</th>
-                <td>
-                    {% for comment in habitat.comments %}
-                        <p>{{ comment.text }}</p>
-                    {% endfor %}
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <a href="{{ path('app_comments_new', {'habitatId': habitat.id}) }}">Add Comments</a>
 
-    <a href="{{ path('app_habitats_index') }}">Retour</a>
+<div id="confirmationModal" class="fixed inset-0 flex items-center justify-center bg-[#000] bg-opacity-70 hidden z-50">
+    <div class="bg-custom-4 p-6 w-2/3 h-2/3 rounded-lg shadow-lg relative z-60 flex flex-col justify-center items-center">
+        <h2 class="text-lg font-semibold mb-4">Confirmer la suppression</h2>
+        <p class="mb-4">Êtes-vous sûr de vouloir supprimer cet habitat ?</p>
+        <div class="flex justify-center items-center gap-4">
+            <button class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" id="cancel-button">Annuler</button>
+            <form method="post" action="{{ path('app_habitats_delete', {'id': habitat.id}) }}" id="delete-form">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ habitat.id) }}">
+                <button type="submit" class="py-2 px-6 bg-custom-5 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200">Supprimer</button>
+            </form>
+        </div>
+    </div>
+</div>
 
-    <a href="{{ path('app_habitats_edit', {'id': habitat.id}) }}">Modifier</a>
-
-    {{ include('habitats/_delete_form.html.twig') }}
 {% endblock %}

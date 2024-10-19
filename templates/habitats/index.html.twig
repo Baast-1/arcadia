@@ -3,39 +3,120 @@
 {% block title %}Liste des habitats{% endblock %}
 
 {% block content %}
-    <h1 class="text-2xl font-bold mb-4">Liste des habitats</h1>
+<div>   
+    <h1 class="font-custom font-semibold text-3xl text-custom-black mt-2">Liste des habitats</h1>
+        <div class="flex flex-row justify-end items-center gap-4  py-8">
+            <div class="mx-2 items-center flex bg-custom-white border-2 border-custom-2 rounded-full py-2 px-4">
+                <label for="rechercher">
+                    <input class="outline-none focus:outline-none px-2 bg-custom-white" id="search-field" placeholder="Rechercher">
+                </label>
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_habitats_new') }}">
+                <div class="items-center flex py-2 px-4 bg-custom-2 hover:bg-custom-4 text-custom-4 hover:text-custom-2 cursor-pointer border-2 border-custom-2 rounded-full transition-colors duration-150 ease-in-out font-semibold">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </div>
+                    <div class="mx-2">Ajouter un habitat</div>
+                </div>
+            </a>
+            {% endif %}
+            </div>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Description</th>
-                <th>Image</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for habitat in habitats %}
-            <tr>
-                <td>{{ habitat.name }}</td>
-                <td>{{ habitat.description|raw }}</td>
-                <td>
-                    {% if habitat.picture %}
-                        <img src="{{ asset('uploads/' ~ habitat.picture.filename) }}" class="w-12 h-12 cover" alt="habitat Picture">
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{{ path('app_habitats_show', {'id': habitat.id}) }}">Voir</a>
-                    <a href="{{ path('app_habitats_edit', {'id': habitat.id}) }}">Modifier</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">Aucun habitat</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="overflow-y-auto custom-scrollbar table-container size-tab w-full rounded-t-2xl">
+        <table class="w-full table-auto overflow-x-auto" id="userTable">
+            <thead class="bg-custom-gray-1 w-full text-center">
+                <tr class="h-16">
+                    <th>
+                        <div class="flex items-center justify-center  my-2 mx-2 text-base">
+                            <button class="mx-1">Image</button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex items-center justify-center  my-2 mx-2 text-base">
+                            <button class="mx-1">Nom</button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex items-center justify-center  my-2 mx-2 text-base">
+                            <button class="mx-1">Description</button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex items-center justify-center  my-2 mx-2 text-base">
+                            <button class="mx-1">Date d'édition</button>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="table-id">
+            {% set alternatingClass = '' %}
+            {% for habitat in habitats %}
+                {% set alternatingClass = alternatingClass == 'bg-custom-white' ? 'bg-custom-gray-1' : 'bg-custom-white' %}
+                <tr class="table-row {{ alternatingClass }} text-center" onclick="window.location.href = '{{ path('app_habitats_show', {'id': habitat.id}) }}';" style="cursor: pointer;">
+                    <td class="py-3 text-sm p-2"><img src="{{ asset('uploads/' ~ habitat.picture.filename) }}" class="w-16 h-16 cover rounded-full" alt="habitat Picture"></td>
+                    <td class="py-3 text-sm">{{ habitat.name }}</td>
+                    <td class="py-3 text-sm">{{ habitat.description[:50] ~ (habitat.description|length > 50 ? '...' : '') }}</td>
+                    <td class="py-3 text-sm">{{ habitat.updatedAt ? habitat.updatedAt|date('d-m-Y') : '' }}</td>
+                    <td class="py-3 text-sm items-center align-middle" style="padding: 0; text-align: center;"></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-    <a href="{{ path('app_habitats_new') }}">Nouveau</a>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const rows = document.querySelectorAll('.table-row');
+    let activeRole = null;
+
+    function applyFilter(role) {
+        if (activeRole === role) {
+            activeRole = null;
+            buttons.forEach(btn => btn.classList.remove('active'));
+            rows.forEach(row => row.style.display = '');
+        } else {
+            activeRole = role;
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttons.forEach(button => {
+                if (button.getAttribute('data-role') === role) {
+                    button.classList.add('active');
+                }
+            });
+            rows.forEach(row => {
+                const rowRole = row.getAttribute('data-role');
+                if (rowRole !== role) {
+                    row.style.display = 'none';
+                } else {
+                    row.style.display = '';
+                }
+            });
+        }
+    }
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const role = this.getAttribute('data-role');
+            applyFilter(role);
+        });
+    });
+    paginateTable();
+});
+
+// Recherche
+$("#search-field").on("keyup", function() {
+    let value = $(this).val().toLowerCase();
+    $("#userTable tbody tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+});
+</script>
+
 {% endblock %}

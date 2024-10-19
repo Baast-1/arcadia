@@ -1,4 +1,8 @@
-<form method="post" action="{{ path('app_habitats_delete', {'id': habitat.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ habitat.id) }}">
-    <button class="btn">Delete</button>
-</form>
+<div class="py-2 px-6 bg-custom-5 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200">
+    <form method="post" action="{{ path('app_habitats_delete', {'id': habitat.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ habitat.id) }}">
+        <button>Supprimer</button>
+    </form>
+</div>
+
+                

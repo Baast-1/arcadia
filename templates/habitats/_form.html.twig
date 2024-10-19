@@ -1,6 +1,24 @@
 {{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.description, {'attr': {'class': 'tinymce'}}) }}
-    {{ form_row(form.picture) }}
-    <button class="btn">{{ button_label|default('Enregistrer') }}</button>
+<div class="flex justify-center items-center mt-24">
+    <div class="flex flex-col items-center justify-center gap-4 p-8 w-7/12">
+        <div class="flex flex-col w-full">
+            {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'font-semibold text-lg'}}) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control mt-2 border-custom-2 border-2 rounded-full p-2'}}) }}
+            {{ form_errors(form.name) }}
+        </div>
+        <div class="flex flex-col w-full">
+            {{ form_label(form.description, 'Description', {'label_attr': {'class': 'font-semibold text-lg'}}) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control mt-2 border-custom-2 border-2 rounded-lg p-2'}}) }}
+            {{ form_errors(form.description) }}
+        </div>
+        <div class="flex flex-col w-full">
+            {{ form_label(form.picture, 'Image', {'label_attr': {'class': 'font-semibold text-lg'}}) }}
+            {{ form_widget(form.picture, {'attr': {'class': 'form-control mt-2 border-custom-2 bg-custom-2 cursor-pointer text-custom-4 border-2 rounded-lg p-2'}}) }}
+            {{ form_errors(form.picture) }}
+        </div>
+        <div class="flex justify-center items-center gap-8 mt-8">
+            <button class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200">{{ button_label|default('Enregistrer') }}</button>
+        </div>
+    </div>
+</div>
 {{ form_end(form) }}
