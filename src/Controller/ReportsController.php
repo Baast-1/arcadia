@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Animals;
 use App\Entity\Reports;
 use App\Form\ReportsType;
+use App\Repository\AnimalsRepository;
 use App\Repository\ReportsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,45 +18,46 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ReportsController extends AbstractController
 {
     #[Route(name: 'app_reports_index', methods: ['GET'])]
-    public function index(ReportsRepository $reportsRepository): Response
+    public function index(ReportsRepository $reportsRepository, AnimalsRepository $animalRepository): Response
     {
+        $reports = $reportsRepository->findAll();
+        foreach ($reports as $report) {
+            $animal = $animalRepository->find($report->getAnimal());
+            $report->setAnimal($animal);
+        }
+
+        $animals = $animalRepository->findAll();
+
         return $this->render('reports/index.html.twig', [
-            'reports' => $reportsRepository->findAll(),
+            'reports' => $reports,
+            'animals' => $animals,
         ]);
     }
 
-    #[Route('/new/{animalId}', name: 'app_reports_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, Security $security, int $animalId): Response
+    #[Route('/new', name: 'app_reports_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $user = $security->getUser();
-
-        $animal = $entityManager->getRepository(Animals::class)->find($animalId);
-        if (!$animal) {
-            throw $this->createNotFoundException('Animal non trouvé');
-        }
-
+    
         $report = new Reports();
-        $report->setAnimal($animal);
-        $report->setUser($user);
-
         $form = $this->createForm(ReportsType::class, $report);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                $report->setUser($user);
                 $entityManager->persist($report);
                 $entityManager->flush();
-
+    
                 $this->addFlash('success', 'Le rapport a été créé avec succès.');
-
-                return $this->redirectToRoute('app_animals_show', ['id' => $animalId], Response::HTTP_SEE_OTHER);
+    
+                return $this->redirectToRoute('app_reports_index', [], Response::HTTP_SEE_OTHER);
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la création du rapport.');
             }
         }
-
-        return $this->render('feed/new.html.twig', [
-            'feed' => $report,
+    
+        return $this->render('reports/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -73,27 +75,39 @@ final class ReportsController extends AbstractController
     {
         $form = $this->createForm(ReportsType::class, $report);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_reports_index', [], Response::HTTP_SEE_OTHER);
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', 'Le rapport a été mis à jour avec succès.');
+    
+                return $this->redirectToRoute('app_reports_index', [], Response::HTTP_SEE_OTHER);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du rapport.');
+            }
         }
-
+    
         return $this->render('reports/edit.html.twig', [
             'report' => $report,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
-
+    
     #[Route('/{id}', name: 'app_reports_delete', methods: ['POST'])]
     public function delete(Request $request, Reports $report, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$report->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($report);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$report->getId(), $request->request->get('_token'))) {
+            try {
+                $entityManager->remove($report);
+                $entityManager->flush();
+                $this->addFlash('success', 'Le rapport a été supprimé avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la suppression du rapport.');
+            }
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide.');
         }
-
+    
         return $this->redirectToRoute('app_reports_index', [], Response::HTTP_SEE_OTHER);
     }
 }

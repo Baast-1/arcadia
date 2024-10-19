@@ -1,11 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Reports{% endblock %}
+{% block title %}Nouveau rapport{% endblock %}
 
-{% block body %}
-    <h1>Create new Reports</h1>
-
+{% block content %}
+    <h1 class="text-2xl font-bold mb-4">Créer un nouveau rapport</h1>
     {{ include('reports/_form.html.twig') }}
-
-    <a href="{{ path('app_reports_index') }}">back to list</a>
 {% endblock %}

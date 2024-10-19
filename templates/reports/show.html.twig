@@ -1,42 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reports{% endblock %}
+{% block title %}Voir un utilisateur{% endblock %}
 
-{% block body %}
-    <h1>Reports</h1>
+{% block content %}
+    <h1 class="text-2xl font-bold mb-4 mt-8">{{ report.animal.name }}</h1>
+    <div class="flex flex-col justify-center items-center mt-24 relative z-10"> 
+        <div class="flex flex-col gap-4 p-8 w-5/12">
+            <div class="flex flex-col w-full">
+                <p class="font-semibold text-lg ">Animal</p>
+                <div class="font-normal text-base">{{ report.animal.name }}</div>
+            </div>
+            <div class="flex flex-col w-full">
+                <p class="font-semibold text-lg ">État</p>
+                <div class="font-normal text-base">{{ report.state }}</div>
+            </div>
+            <div class="flex flex-col w-full">
+                <p class="font-semibold text-lg ">Nourriture</p>
+                <div class="font-normal text-base">{{ report.food }}</div>
+            </div>
+            <div class="flex flex-col w-full">
+                <p class="font-semibold text-lg ">Grammage</p>
+                <div class="font-normal text-base">{{ report.foodWeight }}</div>
+            </div>
+            <div class="flex flex-col w-full">
+                <p class="font-semibold text-lg ">Détails</p>
+                <div class="font-normal text-base">{{ report.detailState }}</div>
+            </div>
+        </div>
+        <div class="flex justify-center items-center gap-8">
+            <a class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" href="{{ path('app_reports_edit', {'id': report.id}) }}">Modifier</a>
+            <button class="py-2 px-6 bg-custom-5 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" id="delete-button">Supprimer</button>
+        </div>
+    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ report.id }}</td>
-            </tr>
-            <tr>
-                <th>State</th>
-                <td>{{ report.state }}</td>
-            </tr>
-            <tr>
-                <th>Food</th>
-                <td>{{ report.food }}</td>
-            </tr>
-            <tr>
-                <th>Food_weight</th>
-                <td>{{ report.foodWeight }}</td>
-            </tr>
-            <tr>
-                <th>Time</th>
-                <td>{{ report.time ? report.time|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Detail_state</th>
-                <td>{{ report.detailState }}</td>
-            </tr>
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_reports_index') }}">back to list</a>
+<div id="confirmationModal" class="fixed inset-0 flex items-center justify-center bg-[#000] bg-opacity-70 hidden z-50">
+    <div class="bg-custom-4 p-6 w-2/3 h-2/3 rounded-lg shadow-lg relative z-60 flex flex-col justify-center items-center">
+        <h2 class="text-lg font-semibold mb-4">Confirmer la suppression</h2>
+        <p class="mb-4">Êtes-vous sûr de vouloir supprimer ce rapport ?</p>
+        <div class="flex justify-center items-center gap-4">
+            <button class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" id="cancel-button">Annuler</button>
+            <form method="post" action="{{ path('app_reports_delete', {'id': report.id}) }}" id="delete-form">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ report.id) }}">
+                <button type="submit" class="py-2 px-6 bg-custom-5 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200">Supprimer</button>
+            </form>
+        </div>
+    </div>
+</div>
 
-    <a href="{{ path('app_reports_edit', {'id': report.id}) }}">edit</a>
-
-    {{ include('reports/_delete_form.html.twig') }}
 {% endblock %}
