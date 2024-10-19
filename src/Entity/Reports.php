@@ -23,9 +23,6 @@ class Reports
     #[ORM\Column]
     private ?int $food_weight = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $time = null;
-
     #[ORM\Column(length: 255)]
     private ?string $detail_state = null;
 
@@ -34,6 +31,14 @@ class Reports
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
     private ?Animals $animal = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -76,18 +81,6 @@ class Reports
         return $this;
     }
 
-    public function getTime(): ?\DateTimeInterface
-    {
-        return $this->time;
-    }
-
-    public function setTime(\DateTimeInterface $time): static
-    {
-        $this->time = $time;
-
-        return $this;
-    }
-
     public function getDetailState(): ?string
     {
         return $this->detail_state;
@@ -120,6 +113,18 @@ class Reports
     public function setAnimal(?Animals $animal): static
     {
         $this->animal = $animal;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

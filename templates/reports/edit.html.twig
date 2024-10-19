@@ -1,13 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Reports{% endblock %}
+{% block title %}Modifier un rapport{% endblock %}
 
-{% block body %}
-    <h1>Edit Reports</h1>
-
-    {{ include('reports/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_reports_index') }}">back to list</a>
-
-    {{ include('reports/_delete_form.html.twig') }}
+{% block content %}
+    <h1 class="text-2xl font-bold mb-4 mt-8">{{ report.animal.name }}</h1>
+    {{ include('reports/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 {% endblock %}
