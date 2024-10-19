@@ -4,10 +4,5 @@
 
 {% block content %}
     <h1 class="text-2xl font-bold mb-4">Modifier {{ habitat.name }}</h1>
-
     {{ include('habitats/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
-
-    <a href="{{ path('app_habitats_index') }}">Retour</a>
-
-    {{ include('habitats/_delete_form.html.twig') }}
 {% endblock %}
