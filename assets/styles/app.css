@@ -82,17 +82,41 @@ input[type="radio"] {
 input[type="radio"] + label {
   display: inline-block;
   padding: 10px 20px;
-  border: 2px solid #0D2C3B;
+  border: 2px solid var(--custom-2);
   border-radius: 50px; 
   cursor: pointer;
 }
 
 input[type="radio"]:checked + label {
-  background-color: #0D2C3B;
+  background-color: var(--custom-2);
   color: white;
 }
 
 input[type="radio"] + label:hover {
-  background-color: #0D2C3B;
+  background-color: var(--custom-2);
   color: white;
+}
+
+
+/* Bouton Filtre Active */
+.filter-btn.active {
+  background-color: var(--custom-2);
+  color: white;
+}
+
+#file-upload-button {
+  margin-top: 0.5rem; /* Espace en haut de l'input */
+  border: 2px solid var(--custom-2); /* Couleur et épaisseur de la bordure */
+  border-radius: 9999px; /* Bordure arrondie (input rond) */
+  padding: 0.5rem; /* Padding interne */
+  cursor: pointer; /* Change le curseur sur hover */
+  transition: all 0.3s ease-in-out; /* Ajoute une transition sur les changements de style */
+}
+
+/* Optionnel : Style supplémentaire pour le hover ou le focus */
+#file-upload-button:hover,
+#file-upload-button:focus {
+  border-color: var(--custom-hover); /* Changer la couleur de la bordure au survol */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ajoute une ombre légère */
+  transform: scale(1.05); /* Légère mise à l'échelle */
 }

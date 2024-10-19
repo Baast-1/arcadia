@@ -7,18 +7,18 @@
     <h1 class="font-custom font-semibold text-3xl text-custom-black mt-2">Liste des utilisateurs</h1>
     <div class="flex items-center justify-between w-full mt-6">
         <div class="flex py-8 align-middle items-center gap-4 font-medium">
-            <button id="btnDemande" class="filter-btn text-sm font-medium border border-black bg-custom-white text-custom-black py-2 px-4 rounded-full hover:text-custom-4 hover:bg-custom-1 transition-colors duration-150 ease-in-out" data-role="VETERINAIRE">Vétérinaire</button>
-            <button id="Accepte" class="filter-btn text-sm font-medium border border-black bg-custom-white text-custom-black py-2 px-4 rounded-full hover:text-custom-4 hover:bg-custom-1 transition-colors duration-150 ease-in-out" data-role="EMPLOYE">Employé</button>
+            <button id="btnDemande" class="filter-btn text-sm font-medium border-2 border-custom-2 bg-custom-4 text-custom-2 py-2 px-4 rounded-full hover:text-custom-4 hover:bg-custom-2 transition-colors duration-150 ease-in-out" data-role="VETERINAIRE">Vétérinaire</button>
+            <button id="Accepte" class="filter-btn text-sm font-medium border-2 border-custom-2 bg-custom-4 text-custom-2 py-2 px-4 rounded-full hover:text-custom-4 hover:bg-custom-2 transition-colors duration-150 ease-in-out" data-role="EMPLOYE">Employé</button>
         </div>
         <div class="flex flex-row justify-center items-center gap-4">
-            <div class="mx-2 items-center flex bg-custom-white border-2 border-custom-gray-2 rounded-full py-2 px-4">
+            <div class="mx-2 items-center flex bg-custom-4 border-2 border-custom-2 rounded-full py-2 px-4">
                 <label for="rechercher">
-                    <input class="outline-none focus:outline-none px-2 bg-custom-white" id="search-field" placeholder="Rechercher">
+                    <input class="outline-none focus:outline-none px-2 bg-custom-4" id="search-field" placeholder="Rechercher">
                 </label>
             </div>
             {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('app_user_new') }}">
-                <div class="items-center flex py-2 px-4 bg-custom-1 hover:bg-custom-4 text-custom-4 hover:text-custom-1 cursor-pointer border-2 border-custom-1 rounded-full transition-colors duration-150 ease-in-out font-semibold">
+                <div class="items-center flex py-2 px-4 bg-custom-2 hover:bg-custom-4 text-custom-4 hover:text-custom-2 cursor-pointer border-2 border-custom-2 rounded-full transition-colors duration-150 ease-in-out font-semibold">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -80,15 +80,6 @@
         </table>
     </div>
 </div>
-
-
-
-<style>
-.filter-btn.active {
-    background-color: black;
-    color: white;
-}
-</style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
