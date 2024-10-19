@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="flex justify-center items-center gap-8">
-            <a class="py-2 px-6 bg-custom-1 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</a>
+            <a class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</a>
             <button class="py-2 px-6 bg-custom-5 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" id="delete-button">Supprimer</button>
         </div>
     </div>
@@ -35,7 +35,7 @@
         <h2 class="text-lg font-semibold mb-4">Confirmer la suppression</h2>
         <p class="mb-4">Êtes-vous sûr de vouloir supprimer cet utilisateur ?</p>
         <div class="flex justify-center items-center gap-4">
-            <button class="py-2 px-6 bg-custom-1 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" id="cancel-button">Annuler</button>
+            <button class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" id="cancel-button">Annuler</button>
             <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" id="delete-form">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
                 <button type="submit" class="py-2 px-6 bg-custom-5 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200">Supprimer</button>

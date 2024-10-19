@@ -3,17 +3,17 @@
     <div class="flex flex-col items-center justify-center gap-4 p-8 w-5/12">
         <div class="flex flex-col w-full">
             {{ form_label(form.firstname, 'Prénom', {'label_attr': {'class': 'font-semibold text-lg'}}) }}
-            {{ form_widget(form.firstname, {'attr': {'class': 'form-control mt-2 border-custom-1 border-2 rounded-full p-2'}}) }}
+            {{ form_widget(form.firstname, {'attr': {'class': 'form-control mt-2 border-custom-2 border-2 rounded-full p-2'}}) }}
             {{ form_errors(form.firstname) }}
         </div>
         <div class="flex flex-col w-full">
             {{ form_label(form.lastname, 'Nom', {'label_attr': {'class': 'font-semibold text-lg'}}) }}
-            {{ form_widget(form.lastname, {'attr': {'class': 'form-control mt-2 border-custom-1 border-2 rounded-full p-2'}}) }}
+            {{ form_widget(form.lastname, {'attr': {'class': 'form-control mt-2 border-custom-2 border-2 rounded-full p-2'}}) }}
             {{ form_errors(form.lastname) }}
         </div>
         <div class="flex flex-col w-full">
             {{ form_label(form.email, 'Email', {'label_attr': {'class': 'font-semibold text-lg'}}) }}
-            {{ form_widget(form.email, {'attr': {'class': 'form-control mt-2 border-custom-1 border-2 rounded-full p-2'}}) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control mt-2 border-custom-2 border-2 rounded-full p-2'}}) }}
             {{ form_errors(form.email) }}
         </div>
         <div class="flex flex-col w-full">
@@ -27,7 +27,7 @@
             {{ form_errors(form.roles) }}
         </div>
         <div class="flex justify-center items-center gap-8 mt-8">
-            <button class="py-2 px-6 bg-custom-1 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200">{{ button_label|default('Enregistrer') }}</button>
+            <button class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200">{{ button_label|default('Enregistrer') }}</button>
         </div>
     </div>
 </div>

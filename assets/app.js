@@ -50,7 +50,7 @@ function paginateTable() {
     function updatePaginationButtons(activePage) {
         const buttons = paginationContainer.querySelectorAll('button');
         buttons.forEach(button => {
-            button.classList.toggle('bg-custom-1', button.textContent == activePage);
+            button.classList.toggle('bg-custom-2', button.textContent == activePage);
             button.classList.toggle('text-custom-4', button.textContent == activePage);
         });
     }
