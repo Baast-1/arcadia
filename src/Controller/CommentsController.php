@@ -15,11 +15,17 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/comments')]
 final class CommentsController extends AbstractController
 {
-    #[Route(name: 'app_comments_index', methods: ['GET'])]
-    public function index(CommentsRepository $commentsRepository): Response
+    #[Route( '/{habitatId}', name: 'app_comments_index', methods: ['GET'])]
+    public function index(CommentsRepository $commentsRepository, EntityManagerInterface $entityManager, int $habitatId): Response
     {
+        $habitat = $entityManager->getRepository(Habitats::class)->find($habitatId);
+        if (!$habitat) {
+            throw $this->createNotFoundException('Habitat non trouvé');
+        }
+
         return $this->render('comments/index.html.twig', [
-            'comments' => $commentsRepository->findAll(),
+            'comments' => $commentsRepository->findBy(['habitat' => $habitatId]),
+            'habitat' => $habitat,
         ]);
     }
 
@@ -53,14 +59,21 @@ final class CommentsController extends AbstractController
         return $this->render('comments/new.html.twig', [
             'feed' => $comment,
             'form' => $form->createView(),
+            'habitat' => $habitat,
         ]);
     }
-
-    #[Route('/{id}', name: 'app_comments_show', methods: ['GET'])]
-    public function show(Comments $comment): Response
+    
+    #[Route('/{id}/{habitatId}', name: 'app_comments_show', methods: ['GET'])]
+    public function showComment(Comments $comment, EntityManagerInterface $entityManager, int $habitatId): Response
     {
+        $habitat = $entityManager->getRepository(Habitats::class)->find($habitatId);
+        if (!$habitat) {
+            throw $this->createNotFoundException('Habitat non trouvé');
+        }
+
         return $this->render('comments/show.html.twig', [
             'comment' => $comment,
+            'habitat' => $habitat,
         ]);
     }
 

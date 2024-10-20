@@ -15,11 +15,18 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/feed')]
 final class FeedController extends AbstractController
 {
-    #[Route(name: 'app_feed_index', methods: ['GET'])]
-    public function index(FeedRepository $feedRepository): Response
+    #[Route( '/{animalId}', name: 'app_feed_index', methods: ['GET'])]
+    public function index(FeedRepository $feedRepository, EntityManagerInterface $entityManager, int $animalId): Response
     {
+        $animal = $entityManager->getRepository(Animals::class)->find($animalId);
+        if (!$animal) {
+            throw $this->createNotFoundException('Animal non trouvé');
+        }
+        $feeds = $feedRepository->findBy(['animal' => $animal]);
+
         return $this->render('feed/index.html.twig', [
-            'feeds' => $feedRepository->findAll(),
+            'feeds' => $feeds,
+            'animal' => $animal,
         ]);
     }
 

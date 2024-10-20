@@ -20,6 +20,14 @@ class Comments
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Habitats $habitat = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +53,18 @@ class Comments
     public function setHabitat(?Habitats $habitat): static
     {
         $this->habitat = $habitat;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

@@ -20,7 +20,6 @@ class AnimalsType extends AbstractType
         $builder
             ->add('name')
             ->add('breed')
-            ->add('view')
             ->add('habitats', EntityType::class, [
                 'class' => Habitats::class,
                 'choice_label' => 'name',

@@ -10,46 +10,40 @@
             {{ app.user.roles ? app.user.roles|json_encode|replace({'ROLE_': ''})|join(', ')|trim('[]"')|lower|capitalize : 'non défini' }}
         </div>
     {% endif %}
-    {% if is_granted('ROLE_ADMIN') %}
-        <div class="ml-6">
-            <a href="{{ path('app_dashboard') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
-                <img src="{{ asset('picto/dashboard.svg') }}" alt="Dashboard" class="w-6 h-6 mr-4">
-                Tableau de bord
-            </a>
-            <a href="{{ path('app_user_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
-                <img src="{{ asset('picto/users.svg') }}" alt="Users" class="w-6 h-6 mr-4">
-                Utilisateurs
-            </a>
-            <a href="{{ path('app_services_index') }}" class="flex items-center mb-6 font-medium text-custom-4 hover:scale-105 hover:duration-200 ">
-                <img src="{{ asset('picto/services.svg') }}" alt="Services" class="w-6 h-6 mr-4">
-                Services
-            </a>
-            <a href="{{ path('app_habitats_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
-                <img src="{{ asset('picto/habitats.svg') }}" alt="Habitats" class="w-6 h-6 mr-4">
-                Habitats
-            </a>
-            <a href="{{ path('app_animals_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
-                <img src="{{ asset('picto/animaux.svg') }}" alt="Animals" class="w-6 h-6 mr-4">
-                Animaux
-            </a>
-            <a href="{{ path('app_opinions_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
-                <img src="{{ asset('picto/stats.svg') }}" alt="Opinions" class="w-6 h-6 mr-4">
-                Statistiques
-            </a>
-            <a href="{{ path('app_reports_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
-                <img src="{{ asset('picto/rapports.svg') }}" alt="Hours" class="w-6 h-6 mr-4">
-                Compte Rendu
-            </a>
-            <a href="{{ path('app_hours_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
-                <img src="{{ asset('picto/clock.svg') }}" alt="Hours" class="w-6 h-6 mr-4">
-                Horaires
-            </a>
-        </div>
-        <div>
-            <a href="{{ path('app_logout') }}" class="px-6 py-2 bg-custom-5 gap-4 mt-2 rounded-lg flex items-center text-custom-4 hover:shadow-xl">
-                Déconnexion
-                <img src="{{ asset('picto/logout.svg') }}" alt="Logout" class="w-5 h-5">
-            </a>
-        </div>
-    {% endif %}
+    <div class="ml-6">
+        <a href="{{ path('app_dashboard') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
+            <img src="{{ asset('picto/dashboard.svg') }}" alt="Dashboard" class="w-6 h-6 mr-4">
+            Tableau de bord
+        </a>
+        <a href="{{ path('app_user_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
+            <img src="{{ asset('picto/users.svg') }}" alt="Users" class="w-6 h-6 mr-4">
+            Utilisateurs
+        </a>
+        <a href="{{ path('app_services_index') }}" class="flex items-center mb-6 font-medium text-custom-4 hover:scale-105 hover:duration-200 ">
+            <img src="{{ asset('picto/services.svg') }}" alt="Services" class="w-6 h-6 mr-4">
+            Services
+        </a>
+        <a href="{{ path('app_habitats_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
+            <img src="{{ asset('picto/habitats.svg') }}" alt="Habitats" class="w-6 h-6 mr-4">
+            Habitats
+        </a>
+        <a href="{{ path('app_animals_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
+            <img src="{{ asset('picto/animaux.svg') }}" alt="Animals" class="w-6 h-6 mr-4">
+            Animaux
+        </a>
+        <a href="{{ path('app_opinions_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
+            <img src="{{ asset('picto/stats.svg') }}" alt="Opinions" class="w-6 h-6 mr-4">
+            Statistiques
+        </a>
+        <a href="{{ path('app_hours_index') }}" class="flex items-center mb-6 text-custom-4 hover:scale-105 hover:duration-200 ">
+            <img src="{{ asset('picto/clock.svg') }}" alt="Hours" class="w-6 h-6 mr-4">
+            Horaires
+        </a>
+    </div>
+    <div>
+        <a href="{{ path('app_logout') }}" class="px-6 py-2 bg-custom-5 gap-4 mt-2 rounded-lg flex items-center text-custom-4 hover:shadow-xl">
+            Déconnexion
+            <img src="{{ asset('picto/logout.svg') }}" alt="Logout" class="w-5 h-5">
+        </a>
+    </div>
 </div>

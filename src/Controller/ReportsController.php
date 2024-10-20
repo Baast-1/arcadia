@@ -17,56 +17,69 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/reports')]
 final class ReportsController extends AbstractController
 {
-    #[Route(name: 'app_reports_index', methods: ['GET'])]
-    public function index(ReportsRepository $reportsRepository, AnimalsRepository $animalRepository): Response
+    #[Route('/{animalId}', name: 'app_reports_index', methods: ['GET'])]
+    public function index(ReportsRepository $reportsRepository, AnimalsRepository $animalRepository, EntityManagerInterface $entityManager, int $animalId): Response
     {
-        $reports = $reportsRepository->findAll();
-        foreach ($reports as $report) {
-            $animal = $animalRepository->find($report->getAnimal());
-            $report->setAnimal($animal);
+        $animal = $entityManager->getRepository(Animals::class)->find($animalId);
+        if (!$animal) {
+            throw $this->createNotFoundException('Animal non trouvé');
         }
-
-        $animals = $animalRepository->findAll();
-
+        $reports = $reportsRepository->findBy(['animal' => $animal]);
+    
         return $this->render('reports/index.html.twig', [
             'reports' => $reports,
-            'animals' => $animals,
+            'animal' => $animal,
         ]);
     }
 
-    #[Route('/new', name: 'app_reports_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, Security $security): Response
+    #[Route('/new/{animalId}', name: 'app_reports_animal', methods: ['GET', 'POST'])]
+    public function newReport(Request $request, EntityManagerInterface $entityManager, Security $security, int $animalId): Response
     {
         $user = $security->getUser();
-    
+
+        $animal = $entityManager->getRepository(Animals::class)->find($animalId);
+        if (!$animal) {
+            throw $this->createNotFoundException('Animal non trouvé');
+        }
+
         $report = new Reports();
+        $report->setAnimal($animal);
+        $report->setUser($user);
+
         $form = $this->createForm(ReportsType::class, $report);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $report->setUser($user);
                 $entityManager->persist($report);
                 $entityManager->flush();
-    
+
                 $this->addFlash('success', 'Le rapport a été créé avec succès.');
-    
-                return $this->redirectToRoute('app_reports_index', [], Response::HTTP_SEE_OTHER);
+
+                return $this->redirectToRoute('app_animals_show', ['id' => $animalId], Response::HTTP_SEE_OTHER);
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la création du rapport.');
             }
         }
-    
+
         return $this->render('reports/new.html.twig', [
+            'feed' => $report,
             'form' => $form->createView(),
+            'animal' => $animal,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_reports_show', methods: ['GET'])]
-    public function show(Reports $report): Response
+    #[Route('/{id}/{animalId}', name: 'app_reports_show', methods: ['GET'])]
+    public function show(Reports $report, EntityManagerInterface $entityManager, int $animalId): Response
     {
+        $animal = $entityManager->getRepository(Animals::class)->find($animalId);
+        if (!$animal) {
+            throw $this->createNotFoundException('Animal non trouvé');
+        }
+    
         return $this->render('reports/show.html.twig', [
             'report' => $report,
+            'animal' => $animal,
         ]);
     }
 

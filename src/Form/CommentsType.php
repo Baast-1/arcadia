@@ -15,10 +15,6 @@ class CommentsType extends AbstractType
     {
         $builder
             ->add('text')
-            ->add('habitat', EntityType::class, [
-                'class' => Habitats::class,
-                'choice_label' => 'name',
-            ])
         ;
     }
 

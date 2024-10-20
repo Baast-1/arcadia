@@ -1,35 +1,107 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Comments index{% endblock %}
+{% block title %}Liste des rapports{% endblock %}
 
-{% block body %}
-    <h1>Comments index</h1>
+{% block content %}  
+<a class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" href="{{ path('app_habitats_show', {'id': habitat.id}) }}">Retour</a>
+<h1 class="font-custom font-semibold text-3xl text-custom-black mt-6">Liste des commentaires pour {{ habitat.name }}</h1>
+<div class="flex items-center justify-end w-full py-8">
+    <div class="flex flex-row justify-center items-center gap-4">
+        <div class="mx-2 items-center flex bg-custom-4 border-2 border-custom-2 rounded-full py-2 px-4">
+            <label for="rechercher">
+                <input class="outline-none focus:outline-none px-2 bg-custom-4" id="search-field" placeholder="Rechercher">
+            </label>
+        </div>
+        <a href="{{ path('app_comments_new', {'habitatId': habitat.id}) }}">
+            <div class="items-center flex py-2 px-4 bg-custom-2 hover:bg-custom-4 text-custom-4 hover:text-custom-2 cursor-pointer border-2 border-custom-2 rounded-full transition-colors duration-150 ease-in-out font-semibold">
+                <div class="">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </div>
+                <div class="mx-2">Ajouter un commentaire</div>
+            </div>
+        </a>
+    </div>
+</div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Text</th>
-                <th>actions</th>
+<div class="overflow-y-auto custom-scrollbar table-container size-tab w-full rounded-t-2xl">
+    <table class="w-full table-auto overflow-x-auto" id="userTable">
+        <thead class="bg-custom-gray-1 w-full text-center">
+            <tr class="h-16">
+                <th>
+                    <div class="flex items-center justify-center  my-2 mx-2 text-base">
+                        <button class="mx-1">Commentaire</button>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex items-center justify-center  my-2 mx-2 text-base">
+                        <button class="mx-1">Date</button>
+                    </div>
+                </th>   
             </tr>
         </thead>
-        <tbody>
+        <tbody id="table-id">
+        {% set alternatingClass = '' %}
         {% for comment in comments %}
-            <tr>
-                <td>{{ comment.id }}</td>
-                <td>{{ comment.text }}</td>
-                <td>
-                    <a href="{{ path('app_comments_show', {'id': comment.id}) }}">show</a>
-                    <a href="{{ path('app_comments_edit', {'id': comment.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
+            {% set alternatingClass = alternatingClass == 'bg-custom-white' ? 'bg-custom-gray-1' : 'bg-custom-white' %}
+            <tr class="table-row {{ alternatingClass }} text-center" onclick="window.location.href = '{{ path('app_comments_show', {'id': comment.id, 'habitatId': habitat.id}) }}';" style="cursor: pointer;"> 
+                <td class="py-3 text-sm"> {{ comment.text[:100] ~ (comment.text|length > 100 ? '...' : '') }}</td>
+                <td class="py-3 text-sm">{{ comment.createdAt ? comment.createdAt|date('d-m-Y') : '' }}</td>
+                <td class="py-3 text-sm items-center align-middle" style="padding: 0; text-align: center;"></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+</div>
 
-    <a href="{{ path('app_comments_new') }}">Create new</a>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const rows = document.querySelectorAll('.table-row');
+    let activeName = null;
+
+    function applyFilter(name) {
+        if (activeName === name) {
+            activeName = null;
+            buttons.forEach(btn => btn.classList.remove('active'));
+            rows.forEach(row => row.style.display = '');
+        } else {
+            activeName = name;
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttons.forEach(button => {
+                if (button.getAttribute('data-name') === name) {
+                    button.classList.add('active');
+                }
+            });
+            rows.forEach(row => {
+                const rowName = row.getAttribute('data-animal-name');
+                if (rowName !== name) {
+                    row.style.display = 'none';
+                } else {
+                    row.style.display = '';
+                }
+            });
+        }
+    }
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const name = this.getAttribute('data-name');
+            applyFilter(name);
+        });
+    });
+    paginateTable();
+});
+
+// Recherche
+$("#search-field").on("keyup", function() {
+    let value = $(this).val().toLowerCase();
+    $("#userTable tbody tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+});
+</script>
+
 {% endblock %}

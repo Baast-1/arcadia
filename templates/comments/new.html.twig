@@ -1,11 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Comments{% endblock %}
+{% block title %}Nouveau commentaire{% endblock %}
 
-{% block body %}
-    <h1>Create new Comments</h1>
-
+{% block content %}
+    <a class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" href="{{ path('app_comments_index', {'habitatId': habitat.id}) }}">Retour</a>
+    <h1 class="text-2xl font-bold mt-6">Créer un nouveau rapport</h1>
     {{ include('comments/_form.html.twig') }}
-
-    <a href="{{ path('app_comments_index') }}">back to list</a>
 {% endblock %}
