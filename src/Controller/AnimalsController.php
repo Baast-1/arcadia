@@ -6,6 +6,8 @@ use App\Entity\Animals;
 use App\Entity\Pictures;
 use App\Form\AnimalsType;
 use App\Repository\AnimalsRepository;
+use App\Repository\FeedRepository;
+use App\Repository\PicturesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +34,7 @@ final class AnimalsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                $animal->setView(0);
                 $entityManager->persist($animal);
                 $entityManager->flush();
 
@@ -70,7 +73,7 @@ final class AnimalsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_animals_show', methods: ['GET'])]
-    public function show(Animals $animal): Response
+    public function show(Animals $animal, FeedRepository $feedRepository): Response
     {
         return $this->render('animals/show.html.twig', [
             'animal' => $animal,
@@ -82,47 +85,39 @@ final class AnimalsController extends AbstractController
     {
         $form = $this->createForm(AnimalsType::class, $animal);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $pictureFiles = $form->get('picture')->getData();
                 if ($pictureFiles) {
-                    foreach ($animal->getPictures() as $oldPicture) {
-                        $oldPicturePath = $this->getParameter('pictures_directory').'/'.$oldPicture->getFilename();
-                        if (file_exists($oldPicturePath)) {
-                            unlink($oldPicturePath);
-                        }
-                        $entityManager->remove($oldPicture);
-                    }
-
                     foreach ($pictureFiles as $pictureFile) {
                         $fileName = uniqid().'.'.$pictureFile->guessExtension();
                         $pictureFile->move(
                             $this->getParameter('pictures_directory'),
                             $fileName
                         );
-
+    
                         $picture = new Pictures();
                         $picture->setFilename($fileName);
                         $picture->setAnimals($animal);
-
+    
                         $entityManager->persist($picture);
                     }
                 }
-
+    
                 $entityManager->flush();
-
+    
                 $this->addFlash('success', 'Animal modifié avec succès !');
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la modification de l\'animal.');
             }
-
+    
             return $this->redirectToRoute('app_animals_index', [], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->render('animals/edit.html.twig', [
             'animal' => $animal,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -131,7 +126,6 @@ final class AnimalsController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$animal->getId(), $request->request->get('_token'))) {
             try {
-                // Suppression des images associées
                 foreach ($animal->getPictures() as $picture) {
                     $picturePath = $this->getParameter('pictures_directory').'/'.$picture->getFilename();
                     if (file_exists($picturePath)) {
@@ -140,10 +134,13 @@ final class AnimalsController extends AbstractController
                     $entityManager->remove($picture);
                 }
 
-                // Suppression de l'animal
+                foreach ($animal->getReports() as $report) {
+                    $entityManager->remove($report);
+                }
+    
                 $entityManager->remove($animal);
                 $entityManager->flush();
-
+    
                 $this->addFlash('success', 'Animal supprimé avec succès !');
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la suppression de l\'animal.');
@@ -151,27 +148,37 @@ final class AnimalsController extends AbstractController
         } else {
             $this->addFlash('error', 'Token CSRF invalide.');
         }
-
+    
         return $this->redirectToRoute('app_animals_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/delete-picture/{pictureId}', name: 'app_services_delete_picture', methods: ['GET'])]
-    public function deletePicture(Request $request,  Animals $animal, AnimalsRepository $animalsRepository, int $pictureId, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/delete-picture/{pictureId}', name: 'app_animals_delete_picture', methods: ['POST'])]
+    public function deletePicture(Request $request, Animals $animal, $pictureId, PicturesRepository $picturesRepository, EntityManagerInterface $entityManager): Response
     {
-        try {
-            $picture = $animalsRepository->find($pictureId);
-            if (!$picture) {
-                throw $this->createNotFoundException('Aucune image trouvée pour l\'ID '.$pictureId);
-            }
-
-            $entityManager->remove($picture);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Image supprimée avec succès !');
-        } catch (\Exception $e) {
-            $this->addFlash('error', 'Une erreur est survenue lors de la suppression de l\'image.');
+        $picture = $picturesRepository->find($pictureId);
+        if (!$picture) {
+            $this->addFlash('error', 'Image non trouvée.');
+            return $this->redirectToRoute('app_animals_edit', ['id' => $animal->getId()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->redirectToRoute('app_services_edit', ['id' => $animal->getId()]);
+        if ($this->isCsrfTokenValid('delete'.$picture->getId(), $request->request->get('_token'))) {
+            try {
+                $picturePath = $this->getParameter('pictures_directory').'/'.$picture->getFilename();
+                if (file_exists($picturePath)) {
+                    unlink($picturePath);
+                }
+                $entityManager->remove($picture);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Image supprimée avec succès !');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la suppression de l\'image.');
+            }
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide.');
+        }
+
+        return $this->redirectToRoute('app_animals_show', ['id' => $animal->getId()], Response::HTTP_SEE_OTHER);
     }
+
 }

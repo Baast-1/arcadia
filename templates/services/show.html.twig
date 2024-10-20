@@ -4,24 +4,27 @@
 
 {% block content %}
     <h1 class="text-2xl font-bold mb-4 mt-8">{{ service.name }}</h1>
-    <div class="flex flex-col justify-center items-center relative z-10"> 
-        <div class="grid grid-cols-2 gap-4 p-8 w-10/12">
+    <div class="flex justify-start items-center gap-8">
+        <a class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" href="{{ path('app_services_edit', {'id': service.id}) }}">Modifier</a>
+        <button class="py-2 px-6 bg-custom-5 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" id="delete-button">Supprimer</button>
+    </div>
+    <div class="grid grid-cols-2 justify-center items-center relative z-10"> 
+        <div class="grid grid-cols-2 gap-4 p-8">
             <div class="flex flex-col w-full">
                 <p class="font-semibold text-lg ">Nom</p>
                 <div class="font-normal text-base">{{ service.name }}</div>
-            </div>
-            <div class="flex flex-col w-full">
-                <p class="font-semibold text-lg ">Image</p>
-                <div class="font-normal text-base"><img src="{{ asset('uploads/' ~ service.picture.filename) }}" class="cover rounded-xl" alt="Service Picture"></td></div>
             </div>
             <div class="flex flex-col w-full col-span-2">
                 <p class="font-semibold text-lg ">Description</p>
                 <div class="font-normal text-base">{{ service.description }}</div>
             </div>
         </div>
-        <div class="flex justify-center items-center gap-8">
-            <a class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" href="{{ path('app_services_edit', {'id': service.id}) }}">Modifier</a>
-            <button class="py-2 px-6 bg-custom-5 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" id="delete-button">Supprimer</button>
+        <div>
+            <div class="flex flex-col w-full">
+                <div class="font-normal text-base">
+                    <img src="{{ asset('uploads/' ~ service.picture.filename) }}" class="cover rounded-xl" alt="habitat Picture">
+                </div>
+            </div>
         </div>
     </div>
 

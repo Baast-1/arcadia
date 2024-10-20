@@ -3,6 +3,7 @@
 {% block title %}Nouveau rapport{% endblock %}
 
 {% block content %}
-    <h1 class="text-2xl font-bold mb-4">Créer un nouveau rapport</h1>
-    {{ include('reports/_form.html.twig') }}
+    <a class="py-2 px-6 bg-custom-2 text-custom-4 rounded-md cursor-pointer font-semibold text-sm hover:shadow-2xl hover:scale-105 hover:duration-200" href="{{ path('app_reports_index', {'animalId': animal.id}) }}">Retour</a>
+    <h1 class="text-2xl font-bold mt-6">Créer un nouveau rapport</h1>
+    {{ include('reports/_form.html.twig', { form: form }) }}
 {% endblock %}

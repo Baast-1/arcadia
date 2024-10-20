@@ -19,11 +19,6 @@ class FeedType extends AbstractType
             ->add('quantity')
             ->add('time', DateTimeType::class, [
             ])
-            ->add('animal', EntityType::class, [
-                'class' => Animals::class,
-                'choice_label' => 'name',
-                'disabled' => true,
-            ])
         ;
     }
 
